@@ -1,0 +1,16 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PublishUrlHistory>C:\deploy\z3\|\\limnos\deploy\z3\|\\limnos.limnology.wisc.edu\deploy\z3\|C:\z3\|C:\work\deploy\z3\</PublishUrlHistory>
+    <InstallUrlHistory>http://lter.limnology.wisc.edu/software2/z3/</InstallUrlHistory>
+    <SupportUrlHistory>http://lter.limnology.wisc.edu/software/Z3</SupportUrlHistory>
+    <UpdateUrlHistory>
+    </UpdateUrlHistory>
+    <BootstrapperUrlHistory>
+    </BootstrapperUrlHistory>
+    <ApplicationRevision>27</ApplicationRevision>
+    <FallbackCulture>en-US</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+    <ProjectView>ProjectFiles</ProjectView>
+    <EnableSecurityDebugging>false</EnableSecurityDebugging>
+  </PropertyGroup>
+</Project>
