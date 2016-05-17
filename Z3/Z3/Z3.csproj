@@ -14,10 +14,10 @@
     </ApplicationIcon>
     <StartupObject>Z3.Program</StartupObject>
     <SignManifests>true</SignManifests>
-    <ManifestCertificateThumbprint>5C351E9E382F843069A4E90E69C7C9B276F2D6E4</ManifestCertificateThumbprint>
-    <ManifestKeyFile>newkey3.pfx</ManifestKeyFile>
+    <ManifestCertificateThumbprint>98007F28FD6C9A6E1D0278ED788E0256F02F6226</ManifestCertificateThumbprint>
+    <ManifestKeyFile>deployment_key.pfx</ManifestKeyFile>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>newkey3.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>deployment_key.pfx</AssemblyOriginatorKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetZone>Internet</TargetZone>
@@ -281,6 +281,7 @@
     </Compile>
     <BaseApplicationManifest Include="Properties\app.manifest" />
     <None Include="app.config" />
+    <None Include="deployment_key.pfx" />
     <None Include="newkey3.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
