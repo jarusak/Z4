@@ -52,34 +52,37 @@ namespace Z3.View.Floating
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(0, 13);
             this.label1.TabIndex = 0;
-            //
+            // 
             // _meas
-            //
+            // 
+            this._meas.Calibrating = false;
             this._meas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._meas.Name = "_meas";
             this._meas.Enabled = false;
+            this._meas.Location = new System.Drawing.Point(0, 0);
+            this._meas.Name = "_meas";
+            this._meas.Size = new System.Drawing.Size(231, 127);
+            this._meas.TabIndex = 1;
             // 
             // Z3FloatingVideoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.Gray;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(231, 127);
             this.ControlBox = false;
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Z3FloatingVideoForm";
+            this.Opacity = 0.5D;
             this.Text = "Video Overlay";
-            //this.TransparencyKey = System.Drawing.Color.Gray;
-            //this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.newMouseDown);
-            this.Opacity = 0.5;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Z3FloatingVideoForm_FormClosing);
+            this.Shown += new System.EventHandler(this.Z3FloatingVideoForm_Shown);
+            this.ResizeBegin += new System.EventHandler(this.Z3FloatingVideoForm_ResizeBegin);
+            this.ResizeEnd += new System.EventHandler(this.Z3FloatingVideoForm_ResizeEnd);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.ResizeBegin += new System.EventHandler(Z3FloatingVideoForm_ResizeBegin);
-            this.ResizeEnd += new System.EventHandler(Z3FloatingVideoForm_ResizeEnd);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(Z3FloatingVideoForm_FormClosing);
-            this.Shown += new System.EventHandler(Z3FloatingVideoForm_Shown);
+
         }
 
         #endregion
