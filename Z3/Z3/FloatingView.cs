@@ -123,11 +123,11 @@ namespace Z3.View.Floating
             _progress.Text = "Measurement Progress";
 
             // Bind Elements onto Forms
+            // Bind will add UI  elements form
             _menu.Bind(_menuForm, _menuForm);
             _primary.Bind(_controlForm.BottomHalf);
             _datapts.Bind(_dataPointsForm.Workspace);
             _datasets.Bind(_controlForm.TopHalf);
-            
         }
 
         #region Window Events

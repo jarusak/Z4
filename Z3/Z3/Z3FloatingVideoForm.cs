@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -22,8 +23,8 @@ namespace Z3.View.Floating
             InitializeComponent();
 
             hook = new MouseHook(true, true);
-            hook.OnMouseActivity += new MouseEventHandler(hook_OnMouseActivity);
-            hook.Start(true, true);
+            //hook.OnMouseActivity += new MouseEventHandler(hook_OnMouseActivity);
+            //hook.Start(true, true);
 
             this.Load += new EventHandler(Z3FloatingVideoForm_Load);
         }
@@ -110,7 +111,8 @@ namespace Z3.View.Floating
         void hook_OnMouseActivity(object sender, MouseEventArgs e)
         {
             if (_meas.Enabled)
-            if (e.Clicks > 0) if (e.X > (this.Left + _w + _meas.Left + 3) && e.X < (this.Left + _w + _meas.Left + _meas.Width + 3)
+            // checks if mouse click colliders with the video overlay
+            if (e.Clicks == 1) if (e.X > (this.Left + _w + _meas.Left + 3) && e.X < (this.Left + _w + _meas.Left + _meas.Width + 3)
                     && e.Y > (this.Top + _h + _meas.Top + 6) && e.Y < (this.Top + _h + _meas.Top + _meas.Height + 6))
             {
                 MouseEventArgs a = new MouseEventArgs(e.Button, e.Clicks, e.X - this.Left - _w - _meas.Left - 3, e.Y - this.Top - _h - _meas.Top - 6, e.Delta);
@@ -149,7 +151,9 @@ namespace Z3.View.Floating
 
         private void Z3FloatingVideoForm_Shown(object sender, EventArgs e)
         {
+            // gets the width of the border of the video overlay
             _w = (this.Width - this.ClientSize.Width) / 2;
+            // get the height of borders, title area or any non-client area
             _h = this.Height - this.ClientSize.Height - 2 * _w;
         }
     }

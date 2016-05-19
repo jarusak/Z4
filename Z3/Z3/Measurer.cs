@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using Z3;
+using System.Diagnostics;
 
 //TO-DO Add calibration support inside this class
 
@@ -97,11 +98,12 @@ namespace Zoopomatic2.Controls {
 
         }
 
-        public void startCalibration()
-        {
-            clear();
-            calib = true;
-        }
+        // this is never used
+        //public void startCalibration()
+        //{
+        //    clear();
+        //    calib = true;
+        //}
 
         public bool CanCalibrate()
         {
@@ -187,7 +189,7 @@ namespace Zoopomatic2.Controls {
             myHeight = Height;
             
             meta = (e.Button == MouseButtons.Right);
-
+            // checks in the options if the mouse has been inverted
             if (Options.InvertMouseButtons)
                 meta = !meta;
             if (Control.ModifierKeys == Keys.Control)
@@ -199,29 +201,38 @@ namespace Zoopomatic2.Controls {
 
             base.OnMouseUp(e);
 
+            //Debug.WriteLine("Calib: " + calib);
+            //Debug.WriteLine("meta: " + meta);
+            //Debug.WriteLine("closed: " + closed);
+            // if we are in calibration mode
             if (calib)
             {
                 if (points.Count > 1)
                     points.RemoveAt(0);
-                    
+
                 points.Add(new MPoint((float)e.X / (float)Width, (float)e.Y / (float)Height));
-                InvalidateEx();
+                InvalidateEx(); // will set the overlay window to update
+                Debug.WriteLine("In Calib");
             }
+            // closed = when left button has been clicked and we are not in calibrate mode
             else if (closed)
             {
                 points.Clear();
                 points.Add(new MPoint((float)e.X / (float)Width, (float)e.Y / (float)Height));
+                Debug.WriteLine("In closed");
                 InvalidateEx();
             }
             else
             {
                 points.Add(new MPoint((float)e.X / (float)Width, (float)e.Y / (float)Height));
-                // ? Why isn't this InvalidateEx()?  Dan?
+                // Why isn't this InvalidateEx()?  Dan?
                 Invalidate();
+                Debug.WriteLine("In else");
             }
 
             closed = !meta && !calib;
-
+            //Debug.WriteLine(calibratedSize.Width);
+            //Debug.WriteLine(calibratedSize.Width);
             if (closed) {
                 double totalPixels = 0;
 
@@ -234,7 +245,7 @@ namespace Zoopomatic2.Controls {
                                                     * calibratedSize.Height), 2.0);
                     totalPixels += Math.Sqrt(xx + yy);
                 }
-
+                // where i left off
                 if (points.Count > 1) {
                     if (Measure != null)
                         Measure(this, new MeasureEventArgs(totalPixels, 
