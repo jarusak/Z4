@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -25,6 +26,7 @@ namespace Z3SchemaEditor
             set
             {
                 _value = value;
+                Debug.WriteLine("Value: " + _value);
                 refreshFields();
             }
         }

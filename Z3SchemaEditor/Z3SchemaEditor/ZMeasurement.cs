@@ -198,6 +198,8 @@ namespace Z3.Model {
 
         private WorkspaceInternals _ws;
 
+        // intializes a ZMeasurement object
+
         public static ZMeasurement fromReader(SqlCeDataReader r, WorkspaceInternals ws) {
             ZMeasurement m = new ZMeasurement();
             m._id = Convert.ToInt32(r["internalid"]);

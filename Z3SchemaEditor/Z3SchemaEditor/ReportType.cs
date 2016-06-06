@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlServerCe;
+using System.Diagnostics;
 using System.Text;
 
 namespace Z3.Workspace
@@ -133,7 +134,9 @@ namespace Z3.Workspace
                 using (SqlCeDataReader dr = cmd.ExecuteReader())
                 {
                     if (!dr.Read())
+                    {
                         throw new System.Data.RowNotInTableException();
+                    }
                     return readItem(dr);
                 }
             }
@@ -149,7 +152,10 @@ namespace Z3.Workspace
                 cmd.Parameters.AddWithValue("@name", rt.Name);
                 cmd.Parameters.AddWithValue("@query", rt.Query);
                 if (cmd.ExecuteNonQuery() != 1)
+                {
+                    Debug.WriteLine("Over Here");
                     throw new System.Data.RowNotInTableException();
+                }
             }
         }
 

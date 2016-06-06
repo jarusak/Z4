@@ -6,6 +6,7 @@ using System.Data.SqlServerCe;
 //using Z3.Leger;
 using Z3.Model;
 using Z3.Workspace;
+using System.Diagnostics;
 
 namespace Z3.Workspace
 {
@@ -36,6 +37,8 @@ namespace Z3.Workspace
             return _cache[table].Values;
         }
 
+        // caches table and/or target ZLevel object and returns it
+
         public ZLevel getType(string table, int level) {
             if (_disposed) throw new ObjectDisposedException("LevelManager");
             
@@ -47,16 +50,22 @@ namespace Z3.Workspace
         }
 
         #region Helper Methods
+
+        // searches for ZLevel with target ID in database 
+
         private ZLevel readFromDB(string table, int level) {
             ZLevel retval = null;
             using (SqlCeCommand cmd = _conn.CreateCommand())
             {
+                Debug.WriteLine(table);
                 cmd.CommandText = "select * from Z3" + table + "Levels where internalid=" + level;
                 using (SqlCeDataReader r = cmd.ExecuteReader()) {
                     if (r.Read())
                         retval = fromReader(table, r);
                     else
+                    {
                         throw new RowNotInTableException();
+                    }     
                 }
             }
             return retval;
@@ -100,7 +109,9 @@ namespace Z3.Workspace
                 {
                     while (r.Read())
                     {
+                        // Adds all the ZLevels and IDs to retval from a table
                         retval.Add(Convert.ToInt32(r["internalid"]), l = fromReader(table, r));
+                        // grabs all the feilds and assignes them to the ZLevel
                         l.Fields = getFields(table, l);
                     }
                 }
@@ -117,9 +128,12 @@ namespace Z3.Workspace
             }
         }
 
+        // caches table and/or ZLevel and returns ZLevel object
+
         private ZLevel fromReader(string table, SqlCeDataReader r)
         {
             int i = Convert.ToInt32(r["internalid"]);
+
             if (!_cache.ContainsKey(table))
                 _cache[table] = new Dictionary<int, ZLevel>();
             if (!_cache[table].ContainsKey(i))
@@ -144,6 +158,8 @@ namespace Z3.Workspace
             }
         }
 
+        // gets all the feilds like name, mesh size, gear, lake etc
+
         private List<ZField> getFields(String table, ZLevel l) {
             List<ZField> retval = new List<ZField>();
             ZField f;
@@ -161,6 +177,8 @@ namespace Z3.Workspace
             }
         }
 
+        // returns a List containing ZLevels that can have children
+
         private List<ZLevel> flatten(Dictionary<int, ZLevel> d)
         {
             List<ZLevel> retval = new List<ZLevel>();
@@ -171,17 +189,19 @@ namespace Z3.Workspace
                 {
                     z = zz;
                     retval.Add(zz);
+                    Debug.WriteLine("NewName: " + zz.Name);
                     break;
                 }
             }
 
             while (z != null && !z.Final)
             {
+                Debug.WriteLine("NewName: " + z.Name);
                 retval.Add(z.Child);
-                z.Child.ParentID = z.ID;
+                z.Child.ParentID = z.ID; // why?
                 z = z.Child;
             }
-
+     
             return retval;
         }
         #endregion
@@ -280,6 +300,7 @@ namespace Z3.Workspace
         {
             using (SqlCeCommand cmd = _conn.CreateCommand())
             {
+                Debug.WriteLine(_table);
                 cmd.CommandText = "insert into Z3" + _table + "Fields (name, level) values(?, ?)";
                 cmd.Parameters.AddWithValue("@name", p);
                 cmd.Parameters.AddWithValue("@lvl", zLevel.ID);
@@ -292,6 +313,10 @@ namespace Z3.Workspace
 }
 
 namespace Z3.Model {
+
+    // ZLevel are the objects under the tabs Countable and Containers
+    // ie. Samples, Subsample, Genus, Species etc
+
     public class ZLevel {
         
         public string Table
@@ -332,15 +357,23 @@ namespace Z3.Model {
             set { _name = value; }
         }
 
+        // Objects like Sample or Genus
+        // No dependencies
+
         public bool Root {
             get { return _root; }
             set { _root = value; }
         }
 
+        // objects that can have no children
+        // ie subsamples
+
         public bool Final {
             get { return _final; }
             set { _final = value; }
         }
+
+        // returns the Child
 
         public ZLevel Child {
             get
@@ -381,6 +414,8 @@ namespace Z3.Model {
             return _name;
         }
 
+        // intializes a ZLevel
+
         public static ZLevel fromReader(string table, SqlCeDataReader r, LevelManager mgr)
         {
             ZLevel l = new ZLevel(table, mgr);
@@ -391,7 +426,6 @@ namespace Z3.Model {
             l._childid = Convert.ToInt32(r["child"]);
             l._final = Convert.ToBoolean(r["final"]);
             l._measurable = Convert.ToBoolean(r["measurable"]);
-
             return l;
         }
 

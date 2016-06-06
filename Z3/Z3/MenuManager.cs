@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Z3.View;
 using System.IO;
 using Z3.Model;
+using System.Diagnostics;
 
 namespace Z3.View.Impl
 {
@@ -67,7 +68,6 @@ namespace Z3.View.Impl
         {
             if (FileNewClicked != null) 
                 FileNewClicked(sender, e);
-
             //String schemaFile, wfFile;
            /* DialogResult r;
             if (_brain.Controller == null || !_brain.Controller.IsValid)

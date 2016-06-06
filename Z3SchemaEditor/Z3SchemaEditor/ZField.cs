@@ -6,6 +6,10 @@ using Z3.Util;
 using System.Windows.Forms;
 
 namespace Z3.Model {
+
+    // objects under Sample and Subsample, Genus, Species
+    // ie. mesh size, comments, gear, name, lake etc 
+
     public class ZField {
         private int _id;
 

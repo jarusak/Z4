@@ -13,6 +13,7 @@ using System.Data.SqlServerCe;
 using System.Text;
 using System.Data.Common;
 using Z3.View.Util;
+using System.Diagnostics;
 
 namespace Z3.Logic
 {
@@ -21,7 +22,7 @@ namespace Z3.Logic
         public LogicLayer() : base("LogicLayer")
         {
             StatusBarLogic sbl = new StatusBarLogic();
-            Insert(sbl);
+            Insert(sbl);  // i dont understand what this does
             Insert(new FileMenuLogic());
             DataPointsDisplayLogic points = new DataPointsDisplayLogic(sbl);
             Insert(points);
@@ -367,17 +368,17 @@ namespace Z3.Logic
                 taxon = imform.ImportTaxonomy;
                 rpt = imform.ImportReports;
             }
-
+            
             // Save Workspace As
             if (newWorkspace.ShowDialog() == DialogResult.Cancel) return;
             if (newWorkspace.FileName == null || newWorkspace.FileName.Equals("")) return;
             workFile = newWorkspace.FileName;
-
+            
             // Load new WorkSpace object and set as current workspace
             try
             {
                 IWorkspace newWS = Z3.Workspace.Factory.Create(schemaFile, workFile, taxon, rpt);
-                
+               
                 //    -> State cascades state changes to everyone
                 state.CurrentWorkspace.Value = newWS;
             }

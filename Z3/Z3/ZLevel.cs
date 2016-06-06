@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlServerCe;
 using Z3.Model;
 using Z3.Workspace;
+using System.Diagnostics;
 
 namespace Z3.Workspace
 {
@@ -30,9 +31,14 @@ namespace Z3.Workspace
         public ICollection<ZLevel> Types(string table)
         {
             if (_disposed) throw new ObjectDisposedException("LevelManager");
-            
+
             if (!_cache.ContainsKey(table))
+            {
+                Debug.WriteLine("Fuck");
                 return new List<ZLevel>();
+            } else {
+                Debug.WriteLine("FUCK!k");
+            }
             return _cache[table].Values;
         }
 

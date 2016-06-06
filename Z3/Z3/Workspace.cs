@@ -7,6 +7,7 @@ using Z3.Model;
 using System.IO;
 using System.Text;
 using Z3.Util;
+using System.Diagnostics;
 
 namespace Z3.Workspace
 {
@@ -1097,11 +1098,17 @@ namespace Z3.Workspace
 
             using (SqlCeConnection conn = openConnection(filename))
             {
-                deleteTable(conn, "Z3Individuals");
+
+               deleteTable(conn, "Z3Individuals"); // one exception
+                //Debug.WriteLine("Here");
                 executeDDL(conn, CREATE_INDIVIDUAL_TABLE);
-                deleteTable(conn, "Z3Measurements");
+               // Debug.WriteLine("Here");
+                deleteTable(conn, "Z3Measurements"); // one exception
+               // Debug.WriteLine("Here");
                 executeDDL(conn, CREATE_MEASUREMENT_TABLE);
-                populate(conn, copyTaxonomy);
+               // Debug.WriteLine("Here");
+                populate(conn, copyTaxonomy); // two exceptions
+               // Debug.WriteLine("Here");
                 if (!copyReports || !tableExists(conn, "Z3Reports"))
                 {
                     deleteTable(conn, "Z3Reports");
@@ -1109,7 +1116,6 @@ namespace Z3.Workspace
                 }
                 conn.Close();
             }
-
             return Load(filename);
         }
 
@@ -1134,6 +1140,7 @@ namespace Z3.Workspace
                 }
                 catch (SqlCeException)
                 {
+                    
                 }
             }
         }
@@ -1191,8 +1198,16 @@ namespace Z3.Workspace
         {
             using (SqlCeCommand cmd = _conn.CreateCommand())
             {
-                cmd.CommandText = query;
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    cmd.CommandText = query;
+                    cmd.ExecuteNonQuery();
+                }
+                catch(SqlCeException e)
+                {
+                    Debug.WriteLine(e.NativeError);
+                }
+                
             }
         }
         private static int getMetaSchemaVersion(SqlCeConnection _conn)
@@ -1213,9 +1228,11 @@ namespace Z3.Workspace
         {
             using (LevelManager mgr = new LevelManager(_conn))
             {
-                foreach (ZLevel l in mgr.Types("Container"))
+                // returns a collection of values from table Container
+                foreach (ZLevel l in mgr.Types("Container")) // returns _cache[table] not sure how it gets cached
                 {
-                    deleteTable(_conn, l.Table);
+                   // Debug.WriteLine(l.Name);
+                    deleteTable(_conn, l.Table); // two exceptions
                     createTable(_conn, l.Table, l.Fields, DEFAULT_CONTAINER_FIELDS);
                 }
 
@@ -1242,6 +1259,7 @@ namespace Z3.Workspace
         }
         private static void createTable(SqlCeConnection _conn, string name, List<ZField> fields, string additionals)
         {
+
             StringBuilder sb = new StringBuilder();
             sb.Append("create table ");
             sb.Append(name);
@@ -1249,6 +1267,7 @@ namespace Z3.Workspace
             sb.Append(additionals);
             foreach (ZField f in fields)
             {
+                //Debug.WriteLine(f.Name);
                 sb.Append(", ");
                 sb.Append(f.Name);
                 sb.Append(' ');
@@ -1257,6 +1276,8 @@ namespace Z3.Workspace
                 sb.Append(f.Default);
             }
             sb.Append(");");
+            //Debug.WriteLine("abOUT TO EXECUTE");
+            Debug.WriteLine(sb.ToString());
             executeDDL(_conn, sb.ToString());
         }
         #endregion

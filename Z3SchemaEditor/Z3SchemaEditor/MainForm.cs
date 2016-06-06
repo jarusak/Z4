@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Z3.Workspace;
 using System.IO;
 using Z3.Model;
+using System.Diagnostics;
 
 namespace Z3SchemaEditor
 {
@@ -23,6 +24,7 @@ namespace Z3SchemaEditor
 
         private void fileLoaded(bool value)
         {
+            // represents the tabs (Containers, Countables, Measurement Types, Properties)
             tabControl1.Visible = value;
             createToolStripMenuItem.Visible = value;
             viewToolStripMenuItem.Visible = value;
@@ -41,8 +43,12 @@ namespace Z3SchemaEditor
 
             if (schema != null)
             {
+                // reload all the lists so we can use them to populate the view
                 schema.Levels.forceReload();
+                // populates all the Lists Views
+                // table container contains all the containers ie Sample and Subsample
                 populateLevels("Container", containerList);
+                // table Countable contains all the countables ie Genus, Species...
                 populateLevels("Countable", countableList);
                 populateMeasurements();
                 populateProperties();
@@ -52,8 +58,10 @@ namespace Z3SchemaEditor
         private void populateMeasurements()
         {
             mtypeList.Items.Clear();
+            // gathers all ZMeaurements from database
             schema.refreshMeasurementTypes();
 
+            // add them all to a listview
             foreach (ZMeasurement m in schema.MeasurementTypes)
             {
                 ListViewItem i = mtypeList.Items.Add(m.Name);
@@ -76,9 +84,12 @@ namespace Z3SchemaEditor
 
         private void populateLevels(string table, ListView list)
         {
+            // get the root of the table
             ZLevel cont = schema.Levels.getRootType(table);
+            // add of the children of the root of the table to ListView
             while (cont != null)
             {
+                Debug.WriteLine(table + ":" + cont.Name);
                 ListViewItem i = list.Items.Add(cont.Name);
                 i.Tag = cont;
                 cont = cont.Child;
@@ -156,7 +167,10 @@ namespace Z3SchemaEditor
             {
                 try
                 {
+                    // returns a WorkspaceInternal object
+                    // opens sql connection to file
                     schema = openFile(openFileDialog1.FileName);
+
                     fileLoaded(true);
                 }
                 catch (IOException ex)
@@ -205,7 +219,7 @@ namespace Z3SchemaEditor
                     {
                         f.Value = ((ZLevel)containerList.SelectedItems[0].Tag);
                         f.ShowDialog();
-                        f.Value.Save();
+                        f.Value.Save(); // why?
                     }
 
                     refreshPage();
@@ -222,7 +236,7 @@ namespace Z3SchemaEditor
                         f.Value.Save();
                     }
 
-                    refreshPage();
+                    refreshPage(); 
                 }
             }
             else if (tabControl1.SelectedTab == measurementsPage)
