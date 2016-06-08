@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -46,8 +47,8 @@ namespace Z3SchemaEditor
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            _value.Name = nameBox.Text;
-            _value.Label = labelBox.Text;
+            _value.Name = nameBox.Text.Replace(" ","");
+            _value.Label = labelBox.Text.Replace(" ", "");
             _value.Default = defaultBox.Text;
             _value.Type = typeBox.Text;
             if (sizable)

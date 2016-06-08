@@ -79,7 +79,7 @@ namespace Z3SchemaEditor
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            Value.AddField("New Field");
+            Value.AddField("NewField");
             refreshFields();
         }
 
