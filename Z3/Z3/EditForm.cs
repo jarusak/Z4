@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -42,11 +43,26 @@ namespace Z3.Forms {
             : this() {
             _e = e;
             values = e.GetValues();
+            int columnNum = 0;
+
             foreach (ZFieldValue v in values.Values) {
                 object[] row = { v, v.Field.Name, v.ReadableValue };
-                properties.Rows.Add(row);
+                if (v.Field.Name.Equals("Gear"))
+                {
+                    DataGridViewComboBoxCell cmb = new DataGridViewComboBoxCell();
+                    cmb.Items.Add("DRC");
+                    cmb.Items.Add("S/P");               
+                    cmb.Value = "DRC";
+                    properties.Rows.Add(row);
+                    properties[2,columnNum] = cmb;
+                } else
+                {
+                    properties.Rows.Add(row);
+                }
+               
                 if (v.Field.Name.ToLower().Equals("hotkey"))
                     _hotkey = v;
+                columnNum++;
             }
         }
 

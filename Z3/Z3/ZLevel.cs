@@ -34,10 +34,7 @@ namespace Z3.Workspace
 
             if (!_cache.ContainsKey(table))
             {
-                Debug.WriteLine("Fuck");
                 return new List<ZLevel>();
-            } else {
-                Debug.WriteLine("FUCK!k");
             }
             return _cache[table].Values;
         }

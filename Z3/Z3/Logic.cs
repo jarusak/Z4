@@ -1686,11 +1686,11 @@ namespace Z3.Logic
         protected override void Initialize()
         {
             view.ActiveFile.FileImportClicked += new EventHandler(ActiveFile_FileImportClicked);
+            view.ActiveFile.FileImportFromDBClicked += new EventHandler(ActiveFile_FileImportFromDBClicked);
         }
 
         void ActiveFile_FileImportClicked(object sender, EventArgs e)
         {
-
             if (openCSV.ShowDialog() == DialogResult.Cancel)
                 return;
             if (openCSV.FileName == null || openCSV.FileName.Equals(""))
@@ -1706,7 +1706,50 @@ namespace Z3.Logic
             }
         }
 
+        void ActiveFile_FileImportFromDBClicked(object sender, EventArgs e)
+        {
+            if (openDBFile.ShowDialog() == DialogResult.Cancel)
+                return;
+            if (openDBFile.FileName == null || openDBFile.FileName.Equals(""))
+                return;
+            try
+            {
+                string openfileName = openDBFile.FileName;
+                IWorkspace w = (WorkspaceInternals)state.CurrentWorkspace.Value;
+                ICollection<ZLevel> levels = w.Levels.Types("Countable");
+
+                if (openDBFile.ShowDialog() == DialogResult.Cancel)
+                    return;
+                if (openDBFile.FileName == null || openDBFile.FileName.Equals(""))
+                    return;
+
+                string saveFileName = saveFile.FileName;
+                FileInfo saveFileInfo = new FileInfo(saveFileName);
+                Debug.WriteLine("This is it: " + saveFileInfo.FullName);
+                //using (System.IO.StreamWriter file =
+                //                 new System.IO.StreamWriter(@"C:\Users\Public\TestFolder\WriteLines2.txt"))
+                //{
+                //    foreach (string line in lines)
+                //    {
+                //        // If the line doesn't contain the word 'Second', write the line to the file.
+                //        if (!line.Contains("Second"))
+                //        {
+                //            file.WriteLine(line);
+                //        }
+                //    }
+                //}
+
+
+            }
+            catch (InvalidDataException ex)
+            {
+                MessageBox.Show("An error occurred while importing the data.  Some of the data may have been partially imported.\n\nError Details:\n" + ex.Message, "Import Error");
+            }
+        }
+
         private System.Windows.Forms.OpenFileDialog openCSV;
+        private System.Windows.Forms.OpenFileDialog openDBFile;
+        private System.Windows.Forms.OpenFileDialog saveFile;
 
         private void InitializeComponent()
         {
@@ -1719,6 +1762,26 @@ namespace Z3.Logic
             this.openCSV.FileName = "species";
             this.openCSV.Filter = "CSV Files|*.csv|All files|*.*";
             this.openCSV.Title = "Import Taxonomy Data";
+
+            this.openDBFile = new System.Windows.Forms.OpenFileDialog();
+            components.Add(openDBFile);
+            // 
+            // openDBFile
+            // 
+            this.openDBFile.DefaultExt = "csv";
+            this.openDBFile.FileName = "species";
+            this.openDBFile.Filter = "CSV Files|*.csv|All files|*.*";
+            this.openDBFile.Title = "Import Database Species List";
+
+            this.saveFile = new System.Windows.Forms.OpenFileDialog();
+            components.Add(saveFile);
+            // 
+            // saveFile
+            // 
+            this.saveFile.DefaultExt = "csv";
+            this.saveFile.FileName = "species";
+            this.saveFile.Filter = "CSV Files|*.csv|All files|*.*";
+            this.saveFile.Title = "Import Taxonomy Data";
         }
     }
 

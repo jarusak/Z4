@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Z3.Forms {
     partial class EditForm {
         /// <summary>
@@ -116,6 +118,5 @@ namespace Z3.Forms {
         private System.Windows.Forms.DataGridViewTextBoxColumn objectColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
-
     }
 }

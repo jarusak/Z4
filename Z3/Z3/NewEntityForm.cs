@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -21,7 +22,7 @@ namespace Z3.Forms {
             InitializeComponent();
             _table = table;
             _ws = workspace;
-
+            
             ICollection<ZLevel> levels = _ws.Levels.Types(table);
             _items = new Dictionary<int, ZLevel>();
             _parents = new Dictionary<int, HierarchicalEntity>();
