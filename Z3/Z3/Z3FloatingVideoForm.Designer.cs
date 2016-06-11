@@ -73,8 +73,8 @@ namespace Z3.View.Floating
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Z3FloatingVideoForm";
-            this.Opacity = 0.5D;
             this.Text = "Video Overlay";
+            this.TransparencyKey = this.BackColor;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Z3FloatingVideoForm_FormClosing);
             this.Shown += new System.EventHandler(this.Z3FloatingVideoForm_Shown);
             this.ResizeBegin += new System.EventHandler(this.Z3FloatingVideoForm_ResizeBegin);
