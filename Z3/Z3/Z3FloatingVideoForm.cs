@@ -14,6 +14,7 @@ namespace Z3.View.Floating
     public partial class Z3FloatingVideoForm : Form
     {
         private MouseHook hook;
+        private Form hiddenForm;
         //private Zoopomatic2.Controls.Measurer _meas;
         private int _w;
         private int _h;
@@ -23,15 +24,37 @@ namespace Z3.View.Floating
             InitializeComponent();
 
             hook = new MouseHook(true, true);
-            //hook.OnMouseActivity += new MouseEventHandler(hook_OnMouseActivity);
-            //hook.Start(true, true);
+            hook.OnMouseActivity += new MouseEventHandler(hook_OnMouseActivity);
+            hook.Start(true, true);
 
+            hiddenForm = new hiddenForm();
+
+            hiddenForm.Show(this);
+
+            this.Move += new EventHandler(Form2_Move);
+            this.Resize += new EventHandler(Form2_Resize);
             this.Load += new EventHandler(Z3FloatingVideoForm_Load);
         }
 
         void Z3FloatingVideoForm_Load(object sender, EventArgs e)
         {
             new Z3.View.Util.WindowSizeMemory(this);
+            Point p = this.PointToScreen(new Point(this.ClientRectangle.X - 10, this.ClientRectangle.Y));
+            this.hiddenForm.Location = p;
+        }
+
+        private void Form2_Resize(object sender, EventArgs e)
+        {
+            Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
+            int titleHeight = screenRectangle.Top - this.Top;
+
+            hiddenForm.SetBounds(this.Location.X, this.Location.Y + titleHeight, this.Width, this.Height);
+        }
+
+        private void Form2_Move(object sender, EventArgs e)
+        {
+            Point p = this.PointToScreen(new Point(this.ClientRectangle.X - 10, this.ClientRectangle.Y));
+            this.hiddenForm.Location = p;
         }
 
         public Zoopomatic2.Controls.Measurer Measurer

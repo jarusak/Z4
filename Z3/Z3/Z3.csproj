@@ -168,6 +168,12 @@
     <Compile Include="FrameSizeForm.Designer.cs">
       <DependentUpon>FrameSizeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="hiddenForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="hiddenForm.Designer.cs">
+      <DependentUpon>hiddenForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="HotkeyData.cs" />
     <Compile Include="HotkeyRecordingForm.cs">
       <SubType>Form</SubType>
