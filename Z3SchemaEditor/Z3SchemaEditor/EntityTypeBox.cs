@@ -26,7 +26,6 @@ namespace Z3SchemaEditor
             set
             {
                 _value = value;
-                Debug.WriteLine("Value: " + _value);
                 refreshFields();
             }
         }

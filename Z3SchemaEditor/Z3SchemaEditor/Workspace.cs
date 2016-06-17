@@ -7,6 +7,7 @@ using Z3.Model;
 using System.IO;
 using System.Text;
 using Z3.Util;
+using System.Diagnostics;
 
 namespace Z3.Workspace
 {
@@ -327,6 +328,7 @@ namespace Z3.Workspace
 
         public static void CreateSchema(string filename)
         {
+           
             using (SqlCeEngine eng = new SqlCeEngine("data source='" + filename + "';"))
             {
                 if (File.Exists(filename)) File.Delete(filename);
@@ -378,7 +380,7 @@ namespace Z3.Workspace
         }
 
         #region Helper Methods
-        private static bool tableExists(SqlCeConnection conn, string tablename)
+        public static bool tableExists(SqlCeConnection conn, string tablename)
         {
             using (SqlCeCommand cmd = conn.CreateCommand())
             {

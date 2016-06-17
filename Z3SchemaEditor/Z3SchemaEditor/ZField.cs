@@ -54,6 +54,21 @@ namespace Z3.Model {
             set { _type = value; }
         }
 
+        private List<String> _addedComboVals;
+
+        public List<String> AddedComboVals
+        {
+            get { return _addedComboVals; }
+            set { _addedComboVals = value; }
+        }
+
+        private List<String> _allComboVals;
+
+        public List<String> AllComboVals
+        {
+            get { return _allComboVals; }
+            set { _allComboVals = value; }
+        }
         public object ReadableFormat(object v) {
             if (_name.ToLower() == "hotkey")
             {
@@ -84,6 +99,7 @@ namespace Z3.Model {
             retval._default = r["default"].ToString();
             retval._type = r["type"].ToString();
             retval._levelid = Convert.ToInt32(r["level"]);
+               
             return retval;
         }
 

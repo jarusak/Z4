@@ -89,7 +89,6 @@ namespace Z3SchemaEditor
             // add of the children of the root of the table to ListView
             while (cont != null)
             {
-                Debug.WriteLine(table + ":" + cont.Name);
                 ListViewItem i = list.Items.Add(cont.Name);
                 i.Tag = cont;
                 cont = cont.Child;

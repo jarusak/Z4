@@ -56,8 +56,7 @@ namespace Z3.Workspace
         private ZLevel readFromDB(string table, int level) {
             ZLevel retval = null;
             using (SqlCeCommand cmd = _conn.CreateCommand())
-            {
-                Debug.WriteLine(table);
+            { 
                 cmd.CommandText = "select * from Z3" + table + "Levels where internalid=" + level;
                 using (SqlCeDataReader r = cmd.ExecuteReader()) {
                     if (r.Read())
@@ -162,19 +161,45 @@ namespace Z3.Workspace
 
         private List<ZField> getFields(String table, ZLevel l) {
             List<ZField> retval = new List<ZField>();
-            ZField f;
-
+            ZField f = new ZField();
+            
             using (SqlCeCommand cmd = _conn.CreateCommand())
             {
                 cmd.CommandText = "select * from Z3" + table + "Fields where level=" + l.ID;
                 using (SqlCeDataReader r = cmd.ExecuteReader()) {
                     while (r.Read()) {
-                        retval.Add(f = ZField.fromReader(r));
-                        f.Level = l;
+                       f = ZField.fromReader(r);
+                       if (f.Type.Equals("combobox"))
+                        {
+                            getComboBox(f.Name, f);
+                        }
+                       retval.Add(f);
+                       f.Level = l;
                     }
                 }
+
                 return retval;
             }
+        }
+
+        private void getComboBox (String table, ZField f)
+        {
+            List<String> comboBoxVals = new List<String>();
+
+            using (SqlCeCommand cmd = _conn.CreateCommand())
+            {
+                cmd.CommandText = "select * from " + table;
+                using (SqlCeDataReader r = cmd.ExecuteReader())
+                {
+                    while (r.Read())
+                    {
+                        comboBoxVals.Add(r["name"].ToString());
+                        Debug.WriteLine("RIGHT HERE: " + r["name"].ToString());
+                    }
+                }
+            }
+
+            f.AllComboVals = comboBoxVals;
         }
 
         // returns a List containing ZLevels that can have children
@@ -189,14 +214,12 @@ namespace Z3.Workspace
                 {
                     z = zz;
                     retval.Add(zz);
-                    Debug.WriteLine("NewName: " + zz.Name);
                     break;
                 }
             }
 
             while (z != null && !z.Final)
             {
-                Debug.WriteLine("NewName: " + z.Name);
                 retval.Add(z.Child);
                 z.Child.ParentID = z.ID; // why?
                 z = z.Child;
@@ -262,6 +285,27 @@ namespace Z3.Workspace
                 cmd.Parameters.AddWithValue("@type", zf.Type);
                 cmd.Parameters.AddWithValue("@iid", zf.Id);
                 cmd.ExecuteNonQuery();
+
+                if (zf.Type.Equals("combobox"))
+                {
+                    if (!Factory.tableExists(_conn, zf.Name))
+                    {
+                        cmd.CommandText = "create table " + zf.Name + " (name nvarchar(100) not null default 'something')";
+                        cmd.ExecuteNonQuery();
+                    }
+                    if (zf.AddedComboVals != null)
+                    {
+                        cmd.CommandText = "insert into " + zf.Name + " (name) values(@param)";
+                        foreach (String param in zf.AddedComboVals)
+                        {
+                            cmd.Parameters.AddWithValue("@param", param);
+                            cmd.ExecuteNonQuery();
+                            cmd.Parameters.Clear();
+                        }
+                        
+                        zf.AddedComboVals.Clear();
+                    }                  
+                }
             }
         }
 
@@ -291,22 +335,35 @@ namespace Z3.Workspace
             {
                 cmd.CommandText = "delete from Z3" + _table + "Fields where internalid=" + field.Id;
                 cmd.ExecuteNonQuery();
+
+                if (field.Type.Equals("combobox"))
+                {
+                    cmd.CommandText = "drop table " + field.Name;
+                    cmd.ExecuteNonQuery();
+                }
             }
 
             forceReload();
         }
 
+        public void DeleteComboBoxValue(String table, String name)
+        {
+            using (SqlCeCommand cmd = _conn.CreateCommand())
+            {
+                cmd.CommandText = "delete from " + table + " where name=@name";
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.ExecuteNonQuery();
+            }
+        }
         public void AddField(ZLevel zLevel, string _table, string p)
         {
             using (SqlCeCommand cmd = _conn.CreateCommand())
             {
-                Debug.WriteLine(_table);
                 cmd.CommandText = "insert into Z3" + _table + "Fields (name, level) values(?, ?)";
                 cmd.Parameters.AddWithValue("@name", p);
                 cmd.Parameters.AddWithValue("@lvl", zLevel.ID);
                 cmd.ExecuteNonQuery();
             }
-
             forceReload();
         }
     }
@@ -475,6 +532,11 @@ namespace Z3.Model {
         public void DeleteField(ZField f)
         {
             _mgr.DeleteField(_table, f);
+        }
+
+        public void DeleteComboBoxValue(String table, String name)
+        {
+            _mgr.DeleteComboBoxValue(table, name);
         }
     }
 }
