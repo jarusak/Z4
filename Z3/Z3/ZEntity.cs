@@ -4,11 +4,14 @@ using System.Data.SqlServerCe;
 using System.Text;
 using System.Data;
 using Z3.Workspace;
+using System.Diagnostics;
 
 namespace Z3.Model {
 
     public interface HierarchicalEntity : IDisposable, State.Watchable {
         Dictionary<ZField, ZFieldValue> GetValues();
+        List<String> GetComboVals(String table);
+
         void SetValues(Dictionary<ZField, ZFieldValue> values);
         void Delete();
 
@@ -269,7 +272,7 @@ namespace Z3.Model {
                     {
                         foreach (ZField f in Type.Fields)
                         {
-                            retval[f] = new ZFieldValue(f, r[f.Name]);
+                           retval[f] = new ZFieldValue(f, r[f.Name]);
                         }
                     }
                     else
@@ -282,6 +285,27 @@ namespace Z3.Model {
             return retval;
 
         }
+
+        public List<String> GetComboVals(String table)
+        {
+            List<String> comboVals = new List<String>();
+
+            using (SqlCeCommand cmd = _workspace.Connection.CreateCommand())
+            {
+                cmd.CommandText = "select * from " + table;
+
+                using (SqlCeDataReader r = cmd.ExecuteReader())
+                {
+                    while (r.Read())
+                    {
+                        comboVals.Add(r[0].ToString());
+                    }
+                }
+            }
+
+            return comboVals;
+        }
+
         protected virtual void valuesHook(Dictionary<ZField, ZFieldValue> hook) {
 
         }

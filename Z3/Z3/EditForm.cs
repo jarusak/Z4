@@ -13,6 +13,8 @@ namespace Z3.Forms {
         private HierarchicalEntity _e;
         private Dictionary<ZField, ZFieldValue> values;
         private ZFieldValue _hotkey;
+        private DataGridViewComboBoxCell cmb = new DataGridViewComboBoxCell();
+        private static string newValue = "";
 
         public char Hotkey {
             get {
@@ -44,15 +46,14 @@ namespace Z3.Forms {
             _e = e;
             values = e.GetValues();
             int columnNum = 0;
-
+            
             foreach (ZFieldValue v in values.Values) {
                 object[] row = { v, v.Field.Name, v.ReadableValue };
-                if (v.Field.Name.Equals("Gear"))
+
+                if (v.Field.Type.Equals("combobox"))
                 {
-                    DataGridViewComboBoxCell cmb = new DataGridViewComboBoxCell();
-                    cmb.Items.Add("DRC");
-                    cmb.Items.Add("S/P");               
-                    cmb.Value = "DRC";
+                    cmb.DataSource = e.GetComboVals(v.Field.Name); ;
+                    cmb.Value = newValue;           
                     properties.Rows.Add(row);
                     properties[2,columnNum] = cmb;
                 } else
@@ -69,6 +70,11 @@ namespace Z3.Forms {
         private void btnOK_Click(object sender, EventArgs e) {
             foreach (DataGridViewRow r in properties.Rows) {
                 if (r.Cells[0].Value != null) {
+                    if (r.Cells[1].Value.Equals("Gear"))
+                    { 
+                        // save combobox entry by user
+                        newValue = r.Cells[2].Value.ToString();
+                    }
                     ZFieldValue v = ((ZFieldValue)r.Cells[0].Value);
                     v.Value = r.Cells[2].Value;
                 }

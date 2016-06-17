@@ -1231,7 +1231,7 @@ namespace Z3.Workspace
                 // returns a collection of values from table Container
                 foreach (ZLevel l in mgr.Types("Container")) // returns _cache[table] not sure how it gets cached
                 {
-                   // Debug.WriteLine(l.Name);
+                    Debug.WriteLine("This is the table: " + l.Table);
                     deleteTable(_conn, l.Table); // two exceptions
                     createTable(_conn, l.Table, l.Fields, DEFAULT_CONTAINER_FIELDS);
                 }
@@ -1267,16 +1267,20 @@ namespace Z3.Workspace
             sb.Append(additionals);
             foreach (ZField f in fields)
             {
-                //Debug.WriteLine(f.Name);
                 sb.Append(", ");
                 sb.Append(f.Name);
                 sb.Append(' ');
-                sb.Append(f.Type);
+                if (f.Type.Equals("combobox"))
+                {
+                    sb.Append("nvarchar(100)");
+                } else
+                {
+                    sb.Append(f.Type);
+                }
                 sb.Append(" not null default ");
                 sb.Append(f.Default);
             }
             sb.Append(");");
-            //Debug.WriteLine("abOUT TO EXECUTE");
             Debug.WriteLine(sb.ToString());
             executeDDL(_conn, sb.ToString());
         }
