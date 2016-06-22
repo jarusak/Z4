@@ -15,6 +15,83 @@ namespace Z3SchemaEditor
         public EntityTypeBox()
         {
             InitializeComponent();
+            fieldsList.ItemDrag += new ItemDragEventHandler(listView_ItemDrag);
+            fieldsList.DragEnter += new DragEventHandler(listView_DragEnter);
+            fieldsList.DragOver += new DragEventHandler(listView_DragOver);
+            fieldsList.DragLeave += new EventHandler(listView_DragLeave);
+            fieldsList.DragDrop += new DragEventHandler(listView_DragDrop);
+        }
+
+        bool privateDrag;
+
+        private void listView_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            privateDrag = true;
+            DoDragDrop(e.Item, DragDropEffects.Move);
+            privateDrag = false;
+        }
+
+        private void listView_DragEnter(object sender, DragEventArgs e)
+        {
+           if (privateDrag) e.Effect = e.AllowedEffect;
+        }
+
+        private void listView_DragOver(object sender, DragEventArgs e)
+        {
+            Point targetPoint = fieldsList.PointToClient(new Point(e.X, e.Y));         
+            int targetIndex = fieldsList.InsertionMark.NearestIndex(targetPoint);
+
+            if (targetIndex > -1)
+            {
+                // Determine whether the mouse pointer is to the left or
+                // the right of the midpoint of the closest item and set
+                // the InsertionMark.AppearsAfterItem property accordingly.
+                Rectangle itemBounds = fieldsList.GetItemRect(targetIndex);
+                if (targetPoint.X > itemBounds.Left + (itemBounds.Width / 2))
+                {
+                    fieldsList.InsertionMark.AppearsAfterItem = true;
+                }
+                else
+                {
+                    fieldsList.InsertionMark.AppearsAfterItem = false;
+                }
+            }
+
+            // Set the location of the insertion mark. If the mouse is
+            // over the dragged item, the targetIndex value is -1 and
+            // the insertion mark disappears.
+            fieldsList.InsertionMark.Index = targetIndex;
+        }
+
+        // Removes the insertion mark when the mouse leaves the control.
+        private void listView_DragLeave(object sender, EventArgs e)
+        {
+            fieldsList.InsertionMark.Index = -1;
+        }
+
+        private void listView_DragDrop(object sender, DragEventArgs e)
+        {
+            // Retrieve the index of the insertion mark;
+            int targetIndex = fieldsList.InsertionMark.Index;
+            
+            // If the insertion mark is not visible, exit the method.
+            if (targetIndex == -1)
+            {
+                return;
+            }
+
+            // Retrieve the dragged item.
+            ListViewItem draggedItem =
+                (ListViewItem)e.Data.GetData(typeof(ListViewItem));
+
+            // Insert a copy of the dragged item at the target index.
+            // A copy must be inserted before the original item is removed
+            // to preserve item index values. 
+            fieldsList.Items.Insert(
+                targetIndex, (ListViewItem)draggedItem.Clone());
+
+            // Remove the original copy of the dragged item.
+            fieldsList.Items.Remove(draggedItem);
         }
 
         public ZLevel Value
@@ -74,6 +151,8 @@ namespace Z3SchemaEditor
         {
             nameBox_TextChanged(null, null);
             measurableBox_CheckedChanged(null, null);
+
+            Value.SwitchField(Value.Fields, fieldsList);
         }
 
         private void addButton_Click(object sender, EventArgs e)

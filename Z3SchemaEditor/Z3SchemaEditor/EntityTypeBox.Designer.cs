@@ -111,6 +111,7 @@ namespace Z3SchemaEditor
             // 
             // fieldsList
             // 
+            this.fieldsList.AllowDrop = true;
             this.fieldsList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
             this.fieldsList.Dock = System.Windows.Forms.DockStyle.Fill;

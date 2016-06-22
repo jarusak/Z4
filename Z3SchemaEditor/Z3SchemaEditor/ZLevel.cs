@@ -7,6 +7,8 @@ using System.Data.SqlServerCe;
 using Z3.Model;
 using Z3.Workspace;
 using System.Diagnostics;
+using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace Z3.Workspace
 {
@@ -194,7 +196,6 @@ namespace Z3.Workspace
                     while (r.Read())
                     {
                         comboBoxVals.Add(r["name"].ToString());
-                        Debug.WriteLine("RIGHT HERE: " + r["name"].ToString());
                     }
                 }
             }
@@ -355,6 +356,7 @@ namespace Z3.Workspace
                 cmd.ExecuteNonQuery();
             }
         }
+
         public void AddField(ZLevel zLevel, string _table, string p)
         {
             using (SqlCeCommand cmd = _conn.CreateCommand())
@@ -365,6 +367,32 @@ namespace Z3.Workspace
                 cmd.ExecuteNonQuery();
             }
             forceReload();
+        }
+
+        public void SwitchField(List<ZField> fields, ListView fieldsList, String table)
+        {
+            int count = 0;
+
+            foreach (ListViewItem item in fieldsList.Items)
+            {
+                ZField targetField = fields.Find(x => x.Name.Contains(item.Text));
+
+                using (SqlCeCommand cmd = _conn.CreateCommand())
+                {
+                    cmd.CommandText = "update Z3" + table + "Fields set name=@name, label=@label, \"default\"=@default, type=@type where internalid=@iid";
+
+                    cmd.Parameters.Clear();
+
+                    cmd.Parameters.AddWithValue("@name", targetField.Name);
+                    cmd.Parameters.AddWithValue("@label", targetField.Label);
+                    cmd.Parameters.AddWithValue("@default", targetField.Default);
+                    cmd.Parameters.AddWithValue("@type", targetField.Type);
+                    cmd.Parameters.AddWithValue("@iid", fields[count].Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+                count++;
+            }
         }
     }
 }
@@ -527,6 +555,11 @@ namespace Z3.Model {
         public void AddField(string p)
         {
             _mgr.AddField(this, _table, p);
+        }
+
+        public void SwitchField(List<ZField> fields, ListView fieldsList)
+        {
+            _mgr.SwitchField(fields, fieldsList, _table);
         }
 
         public void DeleteField(ZField f)

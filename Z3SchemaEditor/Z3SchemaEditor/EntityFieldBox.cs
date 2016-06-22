@@ -36,7 +36,6 @@ namespace Z3SchemaEditor
                 {
                     foreach (String param in _value.AllComboVals)
                     {
-                        Debug.WriteLine("This is param: " + param);
                         listBox1.Items.Add(param);
                     }
                 }
@@ -98,7 +97,7 @@ namespace Z3SchemaEditor
 
             if (showPanel)
             {
-                defaultBox.Enabled = false;
+                //defaultBox.Enabled = false;
                 listBox1.BackColor = System.Drawing.SystemColors.Window;
                 listBox2.BackColor = System.Drawing.SystemColors.Window;
             } 
@@ -108,11 +107,11 @@ namespace Z3SchemaEditor
             // only adds value if the value has not already been added
             if (_value.AllComboVals != null && _value.AllComboVals.Contains(textBox1.Text))
             {
-                MessageBox.Show("Value has already been added\n\n");
+                MessageBoxEx.Show(this, "The given entry name has already been added.", "Validation Error");
             }
             else if (listBox2.Items.Contains(textBox1.Text))
             {
-                MessageBox.Show("Value has already been added\n\n");
+                MessageBoxEx.Show(this, "The given entry name has already been added.", "Validation Error");
             }
             else
             {
