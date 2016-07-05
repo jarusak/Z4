@@ -289,6 +289,14 @@ namespace Z3.View.Impl
         private System.Windows.Forms.Button btnCalibrate;
         #endregion
 
+        public TreeView Tree
+        {
+            get
+            {
+                return CountableTree;
+            }
+        }
+
         void btnUndo_Click(object sender, EventArgs e)
         {
             if (UndoClicked != null) UndoClicked(sender, e);

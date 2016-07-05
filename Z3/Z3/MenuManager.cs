@@ -117,12 +117,7 @@ namespace Z3.View.Impl
             if (FileImportClicked != null)
                 FileImportClicked(sender, e);
         }
-        //IMPORT FROM DATABASE
-        private void importFileFromDB_Click(object sender, EventArgs e)
-        {
-            if (FileImportFromDBClicked != null)
-                FileImportFromDBClicked(sender, e);
-        }
+
         //EXPORT
         private void menuFileExport_Click(object sender, EventArgs e)
         {
@@ -291,7 +286,6 @@ namespace Z3.View.Impl
             this.menuFileOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFileSep0 = new System.Windows.Forms.ToolStripSeparator();
             this.menuFileImport = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuFileImport2 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFileExport = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFileExport2 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFileSep1 = new System.Windows.Forms.ToolStripSeparator();
@@ -349,7 +343,6 @@ namespace Z3.View.Impl
             this.menuFileOpen,
             this.menuFileSep0,
             this.menuFileImport,
-            this.menuFileImport2,
             this.menuFileExport,
             this.menuFileExport2,
             //this.menuFileSep1,
@@ -387,14 +380,6 @@ namespace Z3.View.Impl
             this.menuFileImport.Click += new EventHandler(menuFileImport_Click);
             this.menuFileImport.Visible = true;
             //
-            //Import from Database
-            //
-            // 
-            this.menuFileImport2.Name = "ImportFromDatabase";
-            this.menuFileImport2.Size = new System.Drawing.Size(173, 22);
-            this.menuFileImport2.Text = "&Import File From Database...";
-            this.menuFileImport2.Click += new EventHandler(importFileFromDB_Click);
-            this.menuFileImport2.Visible = true;
             // menuFileExport
             // 
             this.menuFileExport.Name = "menuFileExport";
@@ -669,7 +654,6 @@ namespace Z3.View.Impl
         private System.Windows.Forms.ToolStripMenuItem menuFileOpen;
         private System.Windows.Forms.ToolStripSeparator menuFileSep0;
         private System.Windows.Forms.ToolStripMenuItem menuFileImport;
-        private System.Windows.Forms.ToolStripMenuItem menuFileImport2;
         private System.Windows.Forms.ToolStripMenuItem menuFileExport;
         private System.Windows.Forms.ToolStripMenuItem menuFileExport2;
         private System.Windows.Forms.ToolStripSeparator menuFileSep1;
@@ -748,13 +732,11 @@ namespace Z3.View.Impl
 
                 menuFileExport.Enabled = value;
                 menuFileImport.Enabled = value;
-                menuFileImport2.Enabled = value;
                 menuFileProperties.Enabled = value;
             }
         }
 
         public event EventHandler FileImportClicked;
-        public event EventHandler FileImportFromDBClicked;
         public event EventHandler FileExportClicked;
         public event EventHandler FileQueryClicked;
         public event EventHandler FilePropertiesClicked;

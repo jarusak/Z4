@@ -268,7 +268,6 @@ namespace Z3.View
         string Name { set; }
         bool Enabled { set; }
         event EventHandler FileImportClicked;
-        event EventHandler FileImportFromDBClicked;
         event EventHandler FileExportClicked;
         event EventHandler FileQueryClicked;
         event EventHandler FilePropertiesClicked;
