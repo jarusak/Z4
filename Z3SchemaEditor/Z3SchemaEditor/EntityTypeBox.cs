@@ -12,6 +12,10 @@ namespace Z3SchemaEditor
 {
     public partial class EntityTypeBox : Form
     {
+        private bool Switch;
+        private bool lastItemPlaceBottom;
+        private string text;
+
         public EntityTypeBox()
         {
             InitializeComponent();
@@ -41,20 +45,21 @@ namespace Z3SchemaEditor
             Point targetPoint = fieldsList.PointToClient(new Point(e.X, e.Y));         
             int targetIndex = fieldsList.InsertionMark.NearestIndex(targetPoint);
 
-            if (targetIndex > -1)
+            Debug.WriteLine(targetIndex);
+            if (targetIndex == fieldsList.Items.Count - 1)
             {
-                // Determine whether the mouse pointer is to the left or
-                // the right of the midpoint of the closest item and set
-                // the InsertionMark.AppearsAfterItem property accordingly.
                 Rectangle itemBounds = fieldsList.GetItemRect(targetIndex);
-                if (targetPoint.X > itemBounds.Left + (itemBounds.Width / 2))
+
+                if (targetPoint.Y > itemBounds.Bottom)
                 {
                     fieldsList.InsertionMark.AppearsAfterItem = true;
-                }
-                else
+                    lastItemPlaceBottom = true;
+                } else
                 {
-                    fieldsList.InsertionMark.AppearsAfterItem = false;
+                    lastItemPlaceBottom = false;
                 }
+            } else {
+                fieldsList.InsertionMark.AppearsAfterItem = false;
             }
 
             // Set the location of the insertion mark. If the mouse is
@@ -87,11 +92,21 @@ namespace Z3SchemaEditor
             // Insert a copy of the dragged item at the target index.
             // A copy must be inserted before the original item is removed
             // to preserve item index values. 
-            fieldsList.Items.Insert(
-                targetIndex, (ListViewItem)draggedItem.Clone());
+            
+            if (!lastItemPlaceBottom)
+            {
+                fieldsList.Items.Insert(
+                    targetIndex, (ListViewItem)draggedItem.Clone());
+            } else
+            {
+                fieldsList.Items.Insert(
+                    targetIndex + 1, (ListViewItem)draggedItem.Clone());
+            }
 
             // Remove the original copy of the dragged item.
             fieldsList.Items.Remove(draggedItem);
+
+            Switch = true;
         }
 
         public ZLevel Value
@@ -136,13 +151,12 @@ namespace Z3SchemaEditor
         {
             if (fieldsList.SelectedItems.Count > 0)
             {
-                using (EntityFieldBox f = new EntityFieldBox())
+                using (EntityFieldBox f = new EntityFieldBox(fieldsList))
                 {
                     f.Value = ((ZField)fieldsList.SelectedItems[0].Tag);
                     f.ShowDialog();
                     Value.SaveField(f.Value);
                 }
-
                 refreshFields();
             }
         }
@@ -152,13 +166,26 @@ namespace Z3SchemaEditor
             nameBox_TextChanged(null, null);
             measurableBox_CheckedChanged(null, null);
 
-            Value.SwitchField(Value.Fields, fieldsList);
+            if (Switch) Value.SwitchField(Value.Fields, fieldsList);
         }
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            Value.AddField("NewField");
+            int i = 0;
+            text = "NewField" + fieldsList.Items.Count;
+
+            // adds distict item
+            while (fieldsList.FindItemWithText(text) != null)
+            {
+                text = "NewField" + (fieldsList.Items.Count + ++i);
+            }
+
+            Value.AddField(text);
             refreshFields();
+
+            // highlights added item
+            fieldsList.FindItemWithText(text).Selected = true;
+            fieldsList.HideSelection = false;
         }
 
         private void delButton_Click(object sender, EventArgs e)

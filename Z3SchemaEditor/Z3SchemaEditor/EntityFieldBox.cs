@@ -13,9 +13,19 @@ namespace Z3SchemaEditor
 {
     public partial class EntityFieldBox : Form
     {
-        public EntityFieldBox()
+        private ListView fieldsList;
+        private string orignalText;
+
+        public EntityFieldBox(ListView fieldsList)
         {
             InitializeComponent();
+            this.fieldsList = fieldsList;
+            this.Load += new EventHandler(onLoad);
+        }
+
+        private void onLoad(object sender, EventArgs e)
+        {
+            orignalText = nameBox.Text;
         }
 
         private ZField _value;
@@ -56,27 +66,35 @@ namespace Z3SchemaEditor
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            _value.Name = nameBox.Text.Replace(" ","");
-            _value.Label = labelBox.Text.Replace(" ", "");
-            _value.Default = defaultBox.Text;
-            _value.Type = typeBox.Text;
-            _value.AddedComboVals = new List<String>(listBox2.Items.Cast<String>());
-            
-            if(_value.AllComboVals == null)
+            if (fieldsList.FindItemWithText(nameBox.Text) != null && !orignalText.Equals(nameBox.Text))
             {
-                _value.AllComboVals = new List<String>(listBox2.Items.Cast<String>());
-            } else
-            {
-                _value.AllComboVals.AddRange(new List<String>(listBox2.Items.Cast<String>()));
+                MessageBoxEx.Show(this, "This name has already been added.", "Validation Error");
             }
-                
-            listBox2.Items.Clear();
+            else
+            { 
+                _value.Name = nameBox.Text.Replace(" ", "");
+                _value.Label = labelBox.Text.Replace(" ", "");
+                _value.Default = defaultBox.Text;
+                _value.Type = typeBox.Text;
+                _value.AddedComboVals = new List<String>(listBox2.Items.Cast<String>());
 
-            if (sizable)
-            {
-                if (typeLenBox.Text.Length > 0)
+                if (_value.AllComboVals == null)
                 {
-                    _value.Type = _value.Type + "(" + typeLenBox.Text + ")";
+                    _value.AllComboVals = new List<String>(listBox2.Items.Cast<String>());
+                }
+                else
+                {
+                    _value.AllComboVals.AddRange(new List<String>(listBox2.Items.Cast<String>()));
+                }
+
+                listBox2.Items.Clear();
+
+                if (sizable)
+                {
+                    if (typeLenBox.Text.Length > 0)
+                    {
+                        _value.Type = _value.Type + "(" + typeLenBox.Text + ")";
+                    }
                 }
             }
         }
