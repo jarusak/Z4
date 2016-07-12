@@ -9,14 +9,16 @@ namespace Z3.Model{
         private int _id;
         private int _mtype;
         private double _value;
+        private double _weight;
         private WorkspaceInternals _ws;
 
-        public ZDataPoint(int id, int iid, int mtype, double value, WorkspaceInternals ws)
+        public ZDataPoint(int id, int iid, int mtype, double value, double weight, WorkspaceInternals ws)
         {
             _id = id;
             _individualID = iid;
             _mtype = mtype;
             _value = value;
+            _weight = weight;
             _ws = ws;
         }
 
@@ -64,6 +66,15 @@ namespace Z3.Model{
                 _ws.DataPoints.set(_id, "value", value);
                 if (Modified != null)
                     Modified(this, new EventArgs());
+            }
+        }
+
+        public double Weight
+        {
+            get
+            {
+                if (_disposed) throw new ObjectDisposedException("ZDataPoint");
+                return _weight;
             }
         }
 

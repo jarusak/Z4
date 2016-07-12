@@ -661,7 +661,27 @@ namespace Z3.Logic
         {
             try
             {
-                Measure(e.convertedLength);
+                // caculate the estamated weight
+                Dictionary<ZField, ZFieldValue> countableFields = view.CountableCtl.ContextMenuSubject.GetValues();
+                int a = 0;
+                int b = 0;
+                double weight = 0;
+
+                foreach (ZFieldValue v in countableFields.Values)
+                {
+                    if (v.Field.Name.Equals("A"))
+                    {
+                        a = Int32.Parse(v.ReadableValue.ToString());
+                    }
+                    else if (v.Field.Name.Equals("B"))
+                    {
+                        b = Int32.Parse(v.ReadableValue.ToString());
+                    }
+                }
+
+                weight = a + b + e.convertedLength;
+                
+                Measure(e.convertedLength, weight);
             }
             catch (OperationCanceledException ex)
             {
@@ -681,11 +701,11 @@ namespace Z3.Logic
             Count(state.CurrentIndividual.Value, state.CurrentMeasurement.Value);
         }
 
-        public void Measure(double value)
+        public void Measure(double value, double weight)
         {
             CheckState();
 
-            Measure(state.CurrentIndividual.Value, state.CurrentMeasurement.Value, value);
+            Measure(state.CurrentIndividual.Value, state.CurrentMeasurement.Value, value, weight);
         }
 
         public void CheckState()
@@ -762,7 +782,7 @@ namespace Z3.Logic
             state.CurrentDataPoint.Value = point;
         }
 
-        public void Measure(ZIndividual indiv, ZMeasurement mtype, double value)
+        public void Measure(ZIndividual indiv, ZMeasurement mtype, double value, double weight)
         {
             if (!mtype.Measured)
             {
@@ -787,7 +807,7 @@ namespace Z3.Logic
                 auto.Value = 1;
             }
 
-            ZDataPoint point = indiv.DataPoints.Add(mtype, value);
+            ZDataPoint point = indiv.DataPoints.Add(mtype, value, weight);
             state.CurrentDataPoint.Value = point;
         }
 

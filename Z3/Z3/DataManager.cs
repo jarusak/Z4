@@ -215,27 +215,13 @@ namespace Z3.View
 
         private void doAdd(ZIndividual i, ZDataPoint p)
         {
-            ListViewItem newItem;
-
-            if (p.MeasurementType.Name.Equals("Length"))
-            {
-                int weight = i.Countable.A + i.Countable.B;
-               
-                newItem = new ListViewItem(new String[]{
-                    i.ID.ToString(),
-                    p.MeasurementType.Name + "=" + p.Value,
-                    i.Countable.Name,
-                    weight.ToString()
-                });
-            }
-            else {
-                newItem = new ListViewItem(new String[]{
-                    i.ID.ToString(),
-                    p.MeasurementType.Name + "=" + p.Value,
-                    i.Countable.Name,
-                    ""
-                });
-            }
+           ListViewItem newItem = new ListViewItem(new String[]{
+                i.ID.ToString(),
+                p.MeasurementType.Name + "=" + p.Value,
+                i.Countable.Name,
+                p.Weight.ToString()
+            });
+            
             newItem.Tag = p;
             
             _items.Add(p.ID, newItem);

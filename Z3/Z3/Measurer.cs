@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Text;
 using Z3;
 using System.Diagnostics;
+using Z3.Model;
 
 //TO-DO Add calibration support inside this class
 
@@ -36,7 +37,7 @@ namespace Zoopomatic2.Controls {
         #endregion
 
         #region Properties
-        
+
         /*public int DotSize {
             get {
                 return Options.DotSize;
@@ -212,14 +213,12 @@ namespace Zoopomatic2.Controls {
 
                 points.Add(new MPoint((float)e.X / (float)Width, (float)e.Y / (float)Height));
                 InvalidateEx(); // will set the overlay window to update
-                Debug.WriteLine("In Calib");
-            }
+                           }
             // closed = when left button has been clicked and we are not in calibrate mode
             else if (closed)
             {
                 points.Clear();
                 points.Add(new MPoint((float)e.X / (float)Width, (float)e.Y / (float)Height));
-                Debug.WriteLine("In closed");
                 InvalidateEx();
             }
             else
@@ -227,12 +226,10 @@ namespace Zoopomatic2.Controls {
                 points.Add(new MPoint((float)e.X / (float)Width, (float)e.Y / (float)Height));
                 // Why isn't this InvalidateEx()?  Dan?
                 Invalidate();
-                Debug.WriteLine("In else");
             }
 
             closed = !meta && !calib;
-            //Debug.WriteLine(calibratedSize.Width);
-            //Debug.WriteLine(calibratedSize.Width);
+            
             if (closed) {
                 double totalPixels = 0;
 
@@ -245,7 +242,7 @@ namespace Zoopomatic2.Controls {
                                                     * calibratedSize.Height), 2.0);
                     totalPixels += Math.Sqrt(xx + yy);
                 }
-                // where i left off
+                
                 if (points.Count > 1) {
                     if (Measure != null)
                         Measure(this, new MeasureEventArgs(totalPixels, 

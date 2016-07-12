@@ -6,6 +6,7 @@ using System.Text;
 
 using Z3.Model;
 using System.Data.Common;
+using System.Diagnostics;
 
 namespace Z3.Util
 {
@@ -42,7 +43,7 @@ namespace Z3.Util
                 sb.Append(s.Label);
                 sb.Append(", ");
             }
-            sb.Append("Measurement, Value, Comments");
+            sb.Append("Measurement, Value, Weight, Comments");
             return sb.ToString();
         }
 
@@ -63,7 +64,7 @@ namespace Z3.Util
                     query.Append("SELECT indiv.internalid, \r\n");
                     query.Append(iFields);
                     query.Append(jFields);
-                    query.Append("mtype.name, \r\nm.value, \r\nindiv.Comments \r\n");
+                    query.Append("mtype.name, \r\nm.value, \r\nm.weight, \r\nindiv.Comments \r\n");
 
                     query.Append("FROM Z3Individuals indiv \r\n");
                     query.Append(getJoins(i, "container"));
@@ -80,6 +81,8 @@ namespace Z3.Util
                     retval.Add(query.ToString());
 
                     j = j.Child;
+
+                    Debug.WriteLine(query);
                 }
                 i = i.Child;
             }
