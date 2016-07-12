@@ -34,9 +34,15 @@ namespace Z3.View.Floating
             this.Move += new EventHandler(Form2_Move);
             this.Resize += new EventHandler(Form2_Resize);
             this.Load += new EventHandler(Z3FloatingVideoForm_Load);
+            FormClosing += new FormClosingEventHandler(Z3FloatingVideoForm_Closing);
         }
 
-        void Z3FloatingVideoForm_Load(object sender, EventArgs e)
+        private void Z3FloatingVideoForm_Closing(object sender, EventArgs e)
+        {
+            this.hiddenForm.Close();
+        }
+
+        private void Z3FloatingVideoForm_Load(object sender, EventArgs e)
         {
             new Z3.View.Util.WindowSizeMemory(this);
             Point p = this.PointToScreen(new Point(this.ClientRectangle.X - 10, this.ClientRectangle.Y));

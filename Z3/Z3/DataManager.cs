@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 using Z3.Model;
@@ -31,6 +32,7 @@ namespace Z3.View
             this.individualColumn = new System.Windows.Forms.ColumnHeader();
             this.valColumn = new ColumnHeader();
             this.CountableColumn = new ColumnHeader();
+            this.WeightColumn = new ColumnHeader();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
@@ -42,7 +44,7 @@ namespace Z3.View
             // dataPoints
             //
             this.dataPoints.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.individualColumn, this.valColumn, this.CountableColumn});
+            this.individualColumn, this.valColumn, this.CountableColumn, this.WeightColumn});
             this.dataPoints.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataPoints.Location = new System.Drawing.Point(0, 0);
             this.dataPoints.Name = "dataPoints";
@@ -61,6 +63,8 @@ namespace Z3.View
             this.valColumn.Width = 300;
             this.CountableColumn.Text = "Countable Name";
             this.CountableColumn.Width = 300;
+            this.WeightColumn.Text = "Weight";
+            this.WeightColumn.Width = 50;
             // 
             // statusStrip1
             // 
@@ -112,6 +116,7 @@ namespace Z3.View
         private System.Windows.Forms.ColumnHeader individualColumn;
         private System.Windows.Forms.ColumnHeader valColumn;
         private System.Windows.Forms.ColumnHeader CountableColumn;
+        private ColumnHeader WeightColumn;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
@@ -210,11 +215,27 @@ namespace Z3.View
 
         private void doAdd(ZIndividual i, ZDataPoint p)
         {
-            ListViewItem newItem = new ListViewItem(new String[]{
-                i.ID.ToString(),
-                p.MeasurementType.Name + "=" + p.Value,
-                i.Countable.Name
-            });
+            ListViewItem newItem;
+
+            if (p.MeasurementType.Name.Equals("Length"))
+            {
+                int weight = i.Countable.A + i.Countable.B;
+               
+                newItem = new ListViewItem(new String[]{
+                    i.ID.ToString(),
+                    p.MeasurementType.Name + "=" + p.Value,
+                    i.Countable.Name,
+                    weight.ToString()
+                });
+            }
+            else {
+                newItem = new ListViewItem(new String[]{
+                    i.ID.ToString(),
+                    p.MeasurementType.Name + "=" + p.Value,
+                    i.Countable.Name,
+                    ""
+                });
+            }
             newItem.Tag = p;
             
             _items.Add(p.ID, newItem);

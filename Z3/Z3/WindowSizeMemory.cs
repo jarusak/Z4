@@ -5,6 +5,7 @@ using System.Windows.Forms;
 
 namespace Z3.View.Util
 {
+    // saves the size and location of the windows
     class WindowSizeMemory
     {
         private Form _f;

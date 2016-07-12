@@ -4,6 +4,7 @@ using Z3.Model;
 using System.Text;
 using System.Windows.Forms;
 using Z3.Util;
+using System.Diagnostics;
 
 namespace Z3.View {
     public class TreeWrapper<T> : ItemContainer<T>, IDisposable where T : HierarchicalEntity
@@ -237,6 +238,7 @@ namespace Z3.View {
             this.menuEntityDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.menuEntityProperties = new System.Windows.Forms.ToolStripMenuItem();
             this.menuEntityExpandAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuEntityCollapseAll = new System.Windows.Forms.ToolStripMenuItem();
             this.menuNoEntity = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuNoEntityNew = new System.Windows.Forms.ToolStripMenuItem();
             this.menuEntity.SuspendLayout();
@@ -263,7 +265,8 @@ namespace Z3.View {
             this.menuEntitySep0,
             this.menuEntityDelete,
             this.menuEntityProperties,
-            this.menuEntityExpandAll});
+            this.menuEntityExpandAll,
+            this.menuEntityCollapseAll});
             this.menuEntity.Name = "EntityMenu";
             this.menuEntity.Size = new System.Drawing.Size(193, 76);
             // 
@@ -293,6 +296,13 @@ namespace Z3.View {
             this.menuEntityExpandAll.Text = "Expand All";
             this.menuEntityExpandAll.Click += new EventHandler(ExpandAll_DropDownItemClicked);
             // 
+            // menuEntityCollapseAll
+            // 
+            this.menuEntityCollapseAll.Name = "menuEntityExpandAll";
+            this.menuEntityCollapseAll.Size = new System.Drawing.Size(192, 22);
+            this.menuEntityCollapseAll.Text = "Collapse All";
+            this.menuEntityCollapseAll.Click += new EventHandler(CollapseAll_DropDownItemClicked);
+            // 
             // menuEntityProperties
             // 
             this.menuEntityProperties.Name = "menuEntityProperties";
@@ -300,8 +310,7 @@ namespace Z3.View {
             this.menuEntityProperties.Text = "Properties";
             this.menuEntityProperties.Click += new EventHandler(Properties_DropDownItemClicked);
             this.menuNoEntity.ResumeLayout(false);
-            this.menuEntity.ResumeLayout(false);
-           
+            this.menuEntity.ResumeLayout(false);           
         }
 
         void Properties_DropDownItemClicked(object sender, EventArgs e)
@@ -312,18 +321,12 @@ namespace Z3.View {
 
         void ExpandAll_DropDownItemClicked(object sender, EventArgs e)
         {
-            if (!HasExpanded)
-            {
-                _tree.ExpandAll();
-                this.menuEntityExpandAll.Text = "Collapse All";
-                HasExpanded = true;
-            }
-            else
-            {
-                _tree.CollapseAll();
-                this.menuEntityExpandAll.Text = "Expand All";
-                HasExpanded = false;
-            }
+            _tree.ExpandAll();    
+        }
+
+        void CollapseAll_DropDownItemClicked(object sender, EventArgs e)
+        {
+            _tree.CollapseAll();
         }
 
         void Delete_DropDownItemClicked(object sender, EventArgs e)
@@ -346,6 +349,7 @@ namespace Z3.View {
         private System.Windows.Forms.ToolStripMenuItem menuEntityDelete;
         private System.Windows.Forms.ToolStripMenuItem menuEntityProperties;
         private System.Windows.Forms.ToolStripMenuItem menuEntityExpandAll;
+        private System.Windows.Forms.ToolStripMenuItem menuEntityCollapseAll;
 
         #endregion
 
