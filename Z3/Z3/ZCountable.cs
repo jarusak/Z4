@@ -15,8 +15,7 @@ namespace Z3.Model {
         //public static ZCountable FactoryInstance { get { return _instance; } }
         public static ZField HOTKEY_FIELD = ZField.getDummyField("hotkey", "int", "0");
         private Dictionary<ZField, ZFieldValue> countableFields;
-        private int _a;
-        private int _b;
+     
         //private static ZCountable readFromDB(int level, int id) {
         //    ZCountable c = new ZCountable();
         //    c.getExisting(level, id);
@@ -32,40 +31,6 @@ namespace Z3.Model {
         //protected override void deleteDelegate() {
         //    _cache[Type.ID].Remove(ID);
         //}
-
-        public int A
-        {
-            get
-            {
-                GetParamters();
-                return _a;
-            }
-        }
-
-        public int B
-        {
-            get {
-                GetParamters();
-                return _b;
-            }
-        }
-
-        public void GetParamters()
-        {
-            countableFields = GetValues();
-
-            foreach (ZFieldValue v in countableFields.Values)
-            {
-                if (v.Field.Name.Equals("A"))
-                {
-                    _a = Int32.Parse(v.ReadableValue.ToString());            
-                } 
-                else if (v.Field.Name.Equals("B"))
-                {
-                    _b = Int32.Parse(v.ReadableValue.ToString());
-                }     
-            }
-        }
 
         private Keys _hotkey;
 

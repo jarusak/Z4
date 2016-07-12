@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
-
 using Z3.Model;
 using System.Data.Common;
 using System.Diagnostics;
@@ -81,8 +80,6 @@ namespace Z3.Util
                     retval.Add(query.ToString());
 
                     j = j.Child;
-
-                    Debug.WriteLine(query);
                 }
                 i = i.Child;
             }
