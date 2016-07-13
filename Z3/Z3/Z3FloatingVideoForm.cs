@@ -34,7 +34,7 @@ namespace Z3.View.Floating
             this.Move += new EventHandler(Form2_Move);
             this.Resize += new EventHandler(Form2_Resize);
             this.Load += new EventHandler(Z3FloatingVideoForm_Load);
-            FormClosing += new FormClosingEventHandler(Z3FloatingVideoForm_Closing);
+            this.FormClosing += new FormClosingEventHandler(Z3FloatingVideoForm_Closing);
         }
 
         private void Z3FloatingVideoForm_Closing(object sender, EventArgs e)
@@ -57,10 +57,14 @@ namespace Z3.View.Floating
 
         private void Form2_Resize(object sender, EventArgs e)
         {
-            Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
-            int titleHeight = screenRectangle.Top - this.Top;
-
-            hiddenForm.SetBounds(this.Location.X, this.Location.Y + titleHeight, this.Width, this.Height);
+            Form form = (Form)sender;
+            // make sures that resizing the hiddenForm will not also try to resize it again
+            if (!form.Text.Equals("hiddenForm"))
+            {
+                Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
+                int titleHeight = screenRectangle.Top - this.Top;
+                hiddenForm.SetBounds(this.Location.X, this.Location.Y + titleHeight, this.Width, this.Height - titleHeight);
+            }
         }
         public Zoopomatic2.Controls.Measurer Measurer
         {

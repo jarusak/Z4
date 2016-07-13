@@ -12,13 +12,13 @@ namespace Z3
 {
     public partial class hiddenForm : Form
     {
+
         public hiddenForm()
         {
             InitializeComponent();
-
             this.Resize += new EventHandler(hiddenForm_Resize);
         }
-
+       
         // moves Form1 when Form2 is moved
         protected override void WndProc(ref Message message)
         {
@@ -44,8 +44,7 @@ namespace Z3
 
             Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRectangle.Top - this.Top;
-
-            Owner.SetBounds(childForm.Location.X, childForm.Location.Y - titleHeight, childForm.Width, childForm.Height);
+            Owner.SetBounds(childForm.Location.X, childForm.Location.Y - titleHeight, childForm.Width, childForm.Height + titleHeight);
         }
     }
 }
