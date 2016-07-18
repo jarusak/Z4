@@ -24,11 +24,27 @@ namespace Z3.View
             _panel.Controls.Add(toolStripContainer1);
         }
 
+        public event EventHandler PointDeleteClicked;
+        public event EventHandler PointEditClicked;
+
+        private void DataPointDelete_Click(object sender, EventArgs e)
+        {
+            if (PointDeleteClicked != null)
+                PointDeleteClicked(sender, e);
+        }
+
+        private void DataPointEdit_Click(object sender, EventArgs e)
+        {
+            if (PointEditClicked != null)
+                PointEditClicked(sender, e);
+        }
+
         #region Controls
 
         private void InitializeComponents()
         {
             this.dataPoints = new System.Windows.Forms.ListView();
+            this.dataMenu = new ContextMenuStrip();
             this.individualColumn = new System.Windows.Forms.ColumnHeader();
             this.valColumn = new ColumnHeader();
             this.CountableColumn = new ColumnHeader();
@@ -36,7 +52,10 @@ namespace Z3.View
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
+            this.dataMenu.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -100,9 +119,33 @@ namespace Z3.View
             this.toolStripContainer1.Size = new System.Drawing.Size(560, 437);
             this.toolStripContainer1.TabIndex = 3;
             this.toolStripContainer1.Text = "toolStripContainer1";
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new EventHandler(DataPointDelete_Click);
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.editToolStripMenuItem.Text = "Edit";
+            this.editToolStripMenuItem.Click += new EventHandler(DataPointEdit_Click);
+            // 
+            // dataSetMenu
+            // 
+            this.dataMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteToolStripMenuItem,
+            this.editToolStripMenuItem});
+            this.dataMenu.Name = "dataSetMenu";
+            this.dataMenu.Size = new System.Drawing.Size(165, 44);
             //
             // panel
             //
+            this.dataPoints.ContextMenuStrip = this.dataMenu;
+            this.dataMenu.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
@@ -113,6 +156,9 @@ namespace Z3.View
         }
 
         private System.Windows.Forms.ListView dataPoints;
+        private ContextMenuStrip dataMenu;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader individualColumn;
         private System.Windows.Forms.ColumnHeader valColumn;
         private System.Windows.Forms.ColumnHeader CountableColumn;

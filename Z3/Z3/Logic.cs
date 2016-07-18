@@ -464,6 +464,8 @@ namespace Z3.Logic
 
             view.ActiveDataPoint.PointEditClicked += new EventHandler(ActiveDataPoint_PointEditClicked);
             view.ActiveDataPoint.PointDeleteClicked += new EventHandler(ActiveDataPoint_PointDeleteClicked);
+            view.DataPoints.PointDeleteClicked += new EventHandler(ActiveDataPoint_PointDeleteClicked);
+            view.DataPoints.PointEditClicked += new EventHandler(ActiveDataPoint_PointEditClicked);
 
             myAdd = new EventHandler<ObjectEventArgs<ZDataPoint>>(_indiv_PointAdded);
             myEdit = new EventHandler<ObjectEventArgs<ZDataPoint>>(_indiv_PointModified);
