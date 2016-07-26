@@ -6,6 +6,7 @@ using Z3.View;
 using System.IO;
 using Z3.Model;
 using System.Diagnostics;
+using Z3.View.Floating;
 
 namespace Z3.View.Impl
 {
@@ -252,6 +253,12 @@ namespace Z3.View.Impl
                 OptionsClicked(sender, e);
         }
 
+        private void menuVideoOneWindow_Click(object sender, EventArgs e)
+        {
+            if (OneWindowClicked != null)
+                OneWindowClicked(sender, e);
+        }
+
         #endregion
 
         #region Help
@@ -314,6 +321,7 @@ namespace Z3.View.Impl
             this.menuToolsSchema = new System.Windows.Forms.ToolStripMenuItem();
             this.menuToolsOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.menuVideo = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuVideoOneWindow = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHelpContents = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHelpSep0 = new System.Windows.Forms.ToolStripSeparator();
@@ -583,9 +591,18 @@ namespace Z3.View.Impl
             // 
             // menuVideo
             // 
+            this.menuVideo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuVideoOneWindow});
             this.menuVideo.Name = "menuVideo";
-            this.menuVideo.Size = new System.Drawing.Size(49, 20);
+            this.menuVideo.Size = new System.Drawing.Size(163, 22);
             this.menuVideo.Text = "View";
+            // 
+            // menuVideoOneWindow
+            // 
+            this.menuVideoOneWindow.Name = "menuVideoOneWindow";
+            this.menuVideoOneWindow.Size = new System.Drawing.Size(163, 22);
+            this.menuVideoOneWindow.Text = "One Window";
+            this.menuVideoOneWindow.Click += new EventHandler(menuVideoOneWindow_Click);
             // 
             // menuHelp
             // 
@@ -677,6 +694,7 @@ namespace Z3.View.Impl
         private System.Windows.Forms.ToolStripSeparator menuToolsSep1;
         private System.Windows.Forms.ToolStripMenuItem menuToolsOptions;
         private System.Windows.Forms.ToolStripMenuItem menuVideo;
+        private System.Windows.Forms.ToolStripMenuItem menuVideoOneWindow;
         private System.Windows.Forms.ToolStripMenuItem menuToolsSchema;
         private System.Windows.Forms.ToolStripSeparator menuDataSep1;
         private System.Windows.Forms.ToolStripMenuItem menuHelp;
@@ -859,7 +877,8 @@ namespace Z3.View.Impl
 
         public event EventHandler SchemaEditorClicked;
         public event EventHandler OptionsClicked;
-        
+        public event EventHandler OneWindowClicked;
+
         #endregion
 
 

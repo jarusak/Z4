@@ -98,7 +98,7 @@ namespace Z3.Model {
             }
         }
 
-        public ZIndividual AddIndividual(ZCountable species)
+        public ZIndividual AddIndividual(ZCountable species, ZDataSet dataset)
         {
             if (!species.Type.Measurable)
             {
@@ -110,7 +110,7 @@ namespace Z3.Model {
                 throw new OperationCanceledException("This schema does not allow you to record counts into a " + Type.Name);
             }
 
-            return Workspace.Individuals.insert(this, species, "");
+            return Workspace.Individuals.insert(dataset, species, "");
         }
 
 

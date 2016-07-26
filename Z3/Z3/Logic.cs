@@ -272,6 +272,7 @@ namespace Z3.Logic
             view.Files.FileNewClicked += new System.EventHandler(Files_FileNewClicked);
             view.Files.FileOpenClicked += new System.EventHandler(Files_FileOpenClicked);
             view.Files.FileExitClicked += new System.EventHandler(Files_FileExitClicked);
+            view.Global.OneWindowClicked += new System.EventHandler(Global_OneWindowClicked);
             state.CurrentWorkspace.Cleared += new EventHandler<ObjectEventArgs<Watcher<IWorkspace>>>(CurrentWorkspace_Cleared);
             state.CurrentWorkspace.Replaced += new EventHandler<ObjectEventArgs<Watcher<IWorkspace>>>(CurrentWorkspace_Replaced);
 
@@ -308,6 +309,12 @@ namespace Z3.Logic
         {
             if (Disposed) throw new ObjectDisposedException("FileMenuHandler");
             view.Display.Close();       
+        }
+
+        // handles the OneWindowClicked
+        void Global_OneWindowClicked(object sender, System.EventArgs e)
+        {
+            view.Display.Rearrange();
         }
 
         /// <summary>
@@ -576,7 +583,7 @@ namespace Z3.Logic
             }
             else
             {
-                _label = _indiv.ID + " " + _indiv.Countable.Name + " - <Esc> to close this individual - ";
+                //_label = _indiv.ID + " " + _indiv.Countable.Name + " - <Esc> to close this individual - ";
                 _indiv.PointAdded += myAdd;
                 _indiv.PointModified += myEdit;
                 _indiv.PointDeleted += myDelete;
@@ -739,7 +746,7 @@ namespace Z3.Logic
 
             if (!state.CurrentIndividual.Loaded)
             {
-                state.CurrentIndividual.Value = state.CurrentDataSet.Value.AddIndividual(state.CurrentCountable.Value);
+                state.CurrentIndividual.Value = state.CurrentDataSet.Value.AddIndividual(state.CurrentCountable.Value, state.CurrentDataSet.Value);
             }
         }
 
@@ -769,7 +776,7 @@ namespace Z3.Logic
                 //This type has already been measured on this individual
                 // and it is not set to Increment the existing count
                 // So we need to create a new individual.
-                indiv = indiv.DataSet.AddIndividual(state.CurrentCountable.Value);
+                indiv = indiv.DataSet.AddIndividual(state.CurrentCountable.Value, state.CurrentDataSet.Value);
                 state.CurrentIndividual.Value = indiv;
             }
 
@@ -799,7 +806,7 @@ namespace Z3.Logic
                 // So we need to create a new individual.
                 //Increment for Counts means, increment by 1
                 //Increment for Measurements means you can have more than 1 per indiv
-                indiv = indiv.DataSet.AddIndividual(indiv.Countable);
+                indiv = indiv.DataSet.AddIndividual(indiv.Countable, state.CurrentDataSet.Value);
                 state.CurrentIndividual.Value = indiv;
             }
 
@@ -1292,7 +1299,7 @@ namespace Z3.Logic
                     {
                         state.CurrentDataSet.Value = (ZDataSet)(_tree.SelectedItem);
                     }
-
+                    Debug.WriteLine("Currenet Data Set" + state.CurrentDataSet.Value);
                     state.CurrentWorkspace.Value.DataSetStore.ItemAdded -= myAdd;
                     state.CurrentWorkspace.Value.DataSetStore.ItemEdited -= myEdit;
                     state.CurrentWorkspace.Value.DataSetStore.ItemDeleted -= myDelete;
@@ -1745,6 +1752,7 @@ namespace Z3.Logic
 
     public class ShowProgressLogic : ALogic
     {
+        private int NumOfSamples = 0;
 
         public ShowProgressLogic()
             : base("ShowProgressLogic")
@@ -1802,27 +1810,62 @@ ORDER BY sum1 DESC";
             {
                 view.Progress.Clear();
                 List<ZMeasurement> mtypes = state.CurrentWorkspace.Value.MeasurementTypes;
-                makeHeaders(mtypes);
-
-                List<int[]> rows = new List<int[]>();
+                List<ZDataSet> datasets = makeHeaders(mtypes);
                 
+                List<int[]> rows = new List<int[]>();
+                Dictionary<String, List<int[]>> sampleData = new Dictionary<string, List<int[]>>();
+
                 foreach (ZMeasurement m in mtypes)
                 {
                     if (!m.Counted || m.Increment)
                     {
-                        rows.AddRange(getData(COUNT_QUERY, m));
+                        rows.AddRange(getData(COUNT_QUERY, m, state.CurrentDataSet.Value));
                     }
                     else
                     {
-                        rows.AddRange(getData(SUM_QUERY, m));
+                        rows.AddRange(getData(SUM_QUERY, m, state.CurrentDataSet.Value));
+                        
+                        foreach (ZDataSet dataset in datasets) {
+                            List<int[]> result = getData(SUM_QUERY, m, dataset);
+                            sampleData.Add(dataset.Name,result);
+
+                            foreach (int[] row in result)
+                            {
+                                for (int k = 0; k < row.Length; k++)
+                                {
+                                    Debug.Write(row[k] + " ");
+                                }
+                                Debug.WriteLine("");
+                                
+                            }                         
+                        }
                     }
                 }
 
                 List<int[]> data = mergeData(rows, mtypes);
 
                 foreach (int[] row in data)
-                {
+                {         
                     ListViewItem current = view.Progress.Items.Add(state.CurrentWorkspace.Value.CountableStore.ByID(row[0], row[1]).Name);
+                    Debug.WriteLine(row[0] + " " + row[1]);
+
+                    foreach (KeyValuePair<string, List<int[]>> sample in sampleData)
+                    {
+                        Boolean hasValue = false;
+                        for(int k = 0; k < sample.Value.Count; k++)
+                        {
+                            if(sample.Value[k][0] == row[0] && sample.Value[k][1] == row[1])
+                            {
+                                hasValue = true;
+                                current.SubItems.Add(sample.Value[k][3].ToString());
+                            }
+                        }
+                        if (!hasValue)
+                        {
+                            current.SubItems.Add("0");
+                        }
+                    }
+
                     for (int j = 2; j < row.Length; j++)
                     {
                         current.SubItems.Add(row[j].ToString());
@@ -1844,7 +1887,7 @@ ORDER BY sum1 DESC";
             Dictionary<int, int> index = new Dictionary<int, int>();
             
             int i=2;
-            foreach (ZMeasurement m in cols)
+            foreach (ZMeasurement m in cols) // count, length, eggcount
             {
                 index.Add(m.ID, i);
                 i++;
@@ -1852,7 +1895,7 @@ ORDER BY sum1 DESC";
             
             int rowsize = 2 + cols.Count;
 
-            foreach (int[] row in rows)
+            foreach (int[] row in rows) 
             {
                 bool found = false;
                 foreach (int[] datarow in data)
@@ -1866,9 +1909,9 @@ ORDER BY sum1 DESC";
                 if (!found)
                 {
                     int[] entry = new int[rowsize];
-                    entry[0] = row[0];
-                    entry[1] = row[1];
-                    entry[index[row[2]]] = row[3];
+                    entry[0] = row[0]; // 2
+                    entry[1] = row[1]; // 1
+                    entry[index[row[2]]] = row[3]; // [2] = 6
                     data.Add(entry);
                 }
             }
@@ -1876,14 +1919,14 @@ ORDER BY sum1 DESC";
             return data;
         }
 
-        private List<int[]> getData(string query, ZMeasurement mtype)
+        private List<int[]> getData(string query, ZMeasurement mtype, ZDataSet dataset)
         {
             using (SqlCeCommand cmd = ((WorkspaceInternals)state.CurrentWorkspace.Value).CreateCommand())
             {
                 cmd.CommandText = query;
                 cmd.Parameters.AddWithValue("@mtypeid_1", mtype.ID);
-                cmd.Parameters.AddWithValue("@dslvlid_1", state.CurrentDataSet.Value.TypeID);
-                cmd.Parameters.AddWithValue("@dsid_1",    state.CurrentDataSet.Value.ID);
+                cmd.Parameters.AddWithValue("@dslvlid_1", dataset/*state.CurrentDataSet.Value*/.TypeID);
+                cmd.Parameters.AddWithValue("@dsid_1", dataset/*state.CurrentDataSet.Value*/.ID);
 
                 List<int[]> retval = new List<int[]>();
                 
@@ -1904,14 +1947,66 @@ ORDER BY sum1 DESC";
             }
         }
 
-        private void makeHeaders(List<ZMeasurement> mtypes)
+        private int[] getSampleData()
+        {
+            using (SqlCeCommand cmd = ((WorkspaceInternals)state.CurrentWorkspace.Value).CreateCommand())
+            {
+                cmd.CommandText = "select * from Z3Individuals";
+
+                int[] sampleCounts = new int[NumOfSamples];
+
+                using (SqlCeDataReader r = cmd.ExecuteReader())
+                {
+                    while (r.Read())
+                    {
+                       // if(r['Container'])
+                    }
+                }
+
+                return sampleCounts;
+            }
+        }
+
+        private List<ZDataSet> makeHeaders(List<ZMeasurement> mtypes)
         {
             view.Progress.Columns.Clear();
-            view.Progress.Columns.Add("Classification", 100);
+            view.Progress.Columns.Add("Classification", 90);
+            List<ZDataSet> datasets = new List<ZDataSet>();
+            List<String> dsList = new List<String>();
+
+            try { 
+                foreach (ZDataSet ds in state.CurrentWorkspace.Value.DataSetStore.ChildrenOf(((ZDataSet)state.CurrentDataSet.Value.Parent)))
+                {
+                    datasets.Add(ds);
+                    dsList.Add(ds.ToString());
+                }
+                dsList.Reverse();
+                foreach (String sample in dsList)
+                {
+                    view.Progress.Columns.Add(sample, 90);
+                }
+            }  
+            catch (InvalidOperationException)
+            {
+                foreach (ZDataSet ds in state.CurrentWorkspace.Value.DataSetStore.AllFromLevel(state.CurrentDataSet.Value.Type))
+                {
+                    datasets.Add(ds);
+                    dsList.Add(ds.ToString());
+                }
+                dsList.Reverse();
+                foreach (String sample in dsList)
+                {
+                    view.Progress.Columns.Add(sample, 90);
+                }
+            }
+
             foreach (ZMeasurement m in mtypes)
             {
                 view.Progress.Columns.Add(m.Name, 60);
             }
+
+            datasets.Reverse();
+            return datasets;    
         }
     }
 }

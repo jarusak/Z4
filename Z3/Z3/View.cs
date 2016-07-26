@@ -237,6 +237,11 @@ namespace Z3.View
             _display.Dispose();
         }
 
+        void WindowElements.Rearrange()
+        {
+            _display.Rearrange();
+        }
+
         FormWindowState WindowElements.WindowState
         {
             get
@@ -323,6 +328,7 @@ namespace Z3.View
     {
         event EventHandler SchemaEditorClicked;
         event EventHandler OptionsClicked;
+        event EventHandler OneWindowClicked;
     }
 
     public interface CalibControlElements
@@ -383,6 +389,7 @@ namespace Z3.View
         void Hide();
         void Close();
         void Dispose();
+        void Rearrange();
 
         FormWindowState WindowState { get; set; }
         Measurer Measurer { get; }

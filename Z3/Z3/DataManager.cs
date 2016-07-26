@@ -99,6 +99,7 @@ namespace Z3.View
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Font = new System.Drawing.Font(this.toolStripStatusLabel1.Font, System.Drawing.FontStyle.Bold);
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(150, 17);
             this.toolStripStatusLabel1.Text = "*New Individual";
             // 
@@ -151,7 +152,7 @@ namespace Z3.View
             this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
             this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
             this.toolStripContainer1.ContentPanel.ResumeLayout(false);
-            this.toolStripContainer1.ResumeLayout(false);
+            this.toolStripContainer1.ResumeLayout(false); 
             this.toolStripContainer1.PerformLayout();
         }
 

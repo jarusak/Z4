@@ -6,6 +6,8 @@ using Z3.View.Impl;
 using Zoopomatic2.Controls;
 using Z3.Util;
 using Z3.View.Util;
+using System.Diagnostics;
+using System.Drawing;
 
 namespace Z3.View.Floating
 {
@@ -47,6 +49,8 @@ namespace Z3.View.Floating
 
         private SpeciesTreeWrapper _species;
 
+        private bool resize = true;
+
         public MouseHook Hook
         {
             get
@@ -81,7 +85,7 @@ namespace Z3.View.Floating
         private Measurer _meas;
 
         private void initialize(
-            MenuElementsImpl menu, 
+            MenuElementsImpl menu,
             PrimaryElementImpl counting,
             DataPointElements datapts,
             DataSetElementsImpl datasets)
@@ -133,27 +137,32 @@ namespace Z3.View.Floating
         #region Window Events
         void _progress_ResizeEnd(object sender, EventArgs e)
         {
-            ((WindowElements)this).WindowState = _progress.WindowState;
+            if(resize)
+                ((WindowElements)this).WindowState = _progress.WindowState;
         }
 
         void _videoForm_ResizeEnd(object sender, EventArgs e)
         {
-            ((WindowElements)this).WindowState = _videoForm.WindowState;
+            if (resize)
+                ((WindowElements)this).WindowState = _videoForm.WindowState;
         }
 
         void _menuForm_ResizeEnd(object sender, EventArgs e)
         {
-            ((WindowElements)this).WindowState = _menuForm.WindowState;
+            if (resize)
+                ((WindowElements)this).WindowState = _menuForm.WindowState;
         }
 
         void _dataPointsForm_ResizeEnd(object sender, EventArgs e)
         {
-            ((WindowElements)this).WindowState = _dataPointsForm.WindowState;
+            if (resize)
+                ((WindowElements)this).WindowState = _dataPointsForm.WindowState;
         }
 
         void _controlForm_ResizeEnd(object sender, EventArgs e)
         {
-            ((WindowElements)this).WindowState = _controlForm.WindowState;
+            if (resize)
+                ((WindowElements)this).WindowState = _controlForm.WindowState;
         }
 
         void _menuForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -171,14 +180,14 @@ namespace Z3.View.Floating
         void _menuForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_intentionalClose) return;
-            
+
             if (ViewClosing != null) ViewClosing(sender, e);
         }
 
         void _FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_intentionalClose) return;
-            
+
             if (e.CloseReason == CloseReason.UserClosing) e.Cancel = true;
             if (!e.Cancel) ViewClosing(sender, e);
         }
@@ -249,6 +258,38 @@ namespace Z3.View.Floating
             _menuForm.Dispose();
             _progress.Dispose();
             _intentionalClose = false;
+        }
+
+        void WindowElements.Rearrange()
+        {
+            resize = false;
+            _menuForm.WindowState = FormWindowState.Maximized;
+            _menuForm.IsMdiContainer = true;
+            _menuForm.MaximizeBox = true;
+           // _menuForm.Resize += new EventHandler()
+            
+            Size clientArea = _menuForm.ClientSize;
+            clientArea.Height -= _menuForm.MainMenuStrip.Height;
+
+            // children
+            _controlForm.MdiParent = _menuForm;
+            _progress.MdiParent = _menuForm;
+            _dataPointsForm.MdiParent = _menuForm;
+
+            // _controlForm
+            _controlForm.Height = Convert.ToInt32(0.6 * clientArea.Height);
+            _controlForm.Width = Convert.ToInt32(0.2 * clientArea.Width);
+            _controlForm.Location = new Point(clientArea.Width - _controlForm.Width - 5, 0);
+
+            // _progress
+            _progress.Height = Convert.ToInt32(0.4 * clientArea.Height) - 45;
+            _progress.Width = Convert.ToInt32(0.5 * clientArea.Width);
+            _progress.Location = new Point(0, clientArea.Height - _progress.Height - 45);
+
+            // _dataPointsForm
+            _dataPointsForm.Height = Convert.ToInt32(0.4 * clientArea.Height) - 45;
+            _dataPointsForm.Width = Convert.ToInt32(0.5 * clientArea.Width - 5);
+            _dataPointsForm.Location = new Point(_progress.Width, clientArea.Height - _progress.Height - 45);
         }
 
         public event EventHandler<FormClosingEventArgs> ViewClosing;

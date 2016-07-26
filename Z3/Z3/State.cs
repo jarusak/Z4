@@ -325,15 +325,15 @@ namespace Z3.State.StatusMessages
             {
                 if (!_cal)
                 {
-                    return "Please calibrate the display.";
+                    return "Please Calibrate the Display.";
                 }
                 else if (!_ds)
                 {
-                    return "Please select or create a Data Set.";
+                    return "Please Select or Create a Data Set.";
                 }
                 else if (!_m)
                 {
-                    return "Please select a measurement type.";
+                    return "Please Select a Measurement Type.";
                 }
                 else if (!_spec)
                 {
@@ -348,7 +348,7 @@ namespace Z3.State.StatusMessages
                 }
                 else // Ready to go
                 {
-                    return "Ready to Count/Measure by Mouse or Hotkey.";
+                    return "You are ready to Count/Measure by Mouse or Hotkey.";
                 }
             }
         }

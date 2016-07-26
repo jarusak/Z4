@@ -1,3 +1,5 @@
+using System;
+
 namespace Z3
 {
     partial class DataViewForm
@@ -29,7 +31,10 @@ namespace Z3
         private void InitializeComponent()
         {
             this.listView1 = new System.Windows.Forms.ListView();
+            this.dataMenu = new System.Windows.Forms.ContextMenuStrip();
+            this.stopperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.errorBox = new System.Windows.Forms.TextBox();
+            this.dataMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // listView1
@@ -54,6 +59,22 @@ namespace Z3
             this.errorBox.TabIndex = 1;
             this.errorBox.Visible = false;
             // 
+            // datatMenu
+            // 
+            this.dataMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.stopperToolStripMenuItem});
+            this.dataMenu.Name = "dataMenu";
+            this.dataMenu.Size = new System.Drawing.Size(165, 22);
+            // 
+            // stopperToolStripMenuItem
+            // 
+            this.stopperToolStripMenuItem.Name = "stopperToolStripMenuItem";
+            this.stopperToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.stopperToolStripMenuItem.Text = "Insert Stopper";
+            this.stopperToolStripMenuItem.Click += new EventHandler(InsertStopper_Click);
+            this.listView1.ContextMenuStrip = this.dataMenu;
+            this.dataMenu.ResumeLayout(false);
+            // 
             // DataViewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -66,12 +87,18 @@ namespace Z3
             this.Load += new System.EventHandler(this.DataViewForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
 
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.TextBox errorBox;
+        private System.Windows.Forms.ContextMenuStrip dataMenu;
+        private System.Windows.Forms.ToolStripMenuItem stopperToolStripMenuItem;
+
+        private void InsertStopper_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

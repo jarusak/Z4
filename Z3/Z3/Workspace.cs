@@ -1362,7 +1362,7 @@ namespace Z3.Workspace
         public ZIndividual insert(ZDataSet c, ZCountable s, string comments)
         {
             if (_disposed) throw new ObjectDisposedException("IndividualManager");
-
+            Debug.WriteLine("Refering one: " + c.Name);
             int id = createNew(c.TypeID, c.ID, s.TypeID, s.ID, comments);
             c.hasBeenModified();
             return byID(id);
@@ -1391,6 +1391,7 @@ namespace Z3.Workspace
                     splvl + ", " +
                     spid + ", ?)";
                 cmd.Parameters.AddWithValue("@comments", cmts);
+                Debug.WriteLine(cmd.CommandText);
                 if (cmd.ExecuteNonQuery() != 1)
                     throw new InvalidOperationException("Could not insert record");
             }
