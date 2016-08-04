@@ -707,14 +707,49 @@ namespace Z3.Logic
         {
             CheckState();
 
-            Count(state.CurrentIndividual.Value, state.CurrentMeasurement.Value);
+            Dictionary<ZField, ZFieldValue> countableFields = state.CurrentCountable.Value.GetValues();
+            bool stopper = false;
+
+            foreach (ZFieldValue v in countableFields.Values)
+            {
+                if (v.Field.Name.Equals("Stopper"))
+                {
+                    stopper = Convert.ToBoolean(v.ReadableValue.ToString());
+                }
+            }
+
+            if (!stopper)
+            {
+                Count(state.CurrentIndividual.Value, state.CurrentMeasurement.Value);
+            } else
+            {
+                throw new OperationCanceledException(state.CurrentCountable.Value.Name + " has a stopper added to it");
+            }
         }
 
         public void Measure(double value, double weight)
         {
             CheckState();
 
-            Measure(state.CurrentIndividual.Value, state.CurrentMeasurement.Value, value, weight);
+            Dictionary<ZField, ZFieldValue> countableFields = state.CurrentCountable.Value.GetValues();
+            bool stopper = false;
+
+            foreach (ZFieldValue v in countableFields.Values)
+            {
+                if (v.Field.Name.Equals("Stopper"))
+                {
+                    stopper = Convert.ToBoolean(v.ReadableValue.ToString());
+                }
+            }
+
+            if (!stopper)
+            {
+                Measure(state.CurrentIndividual.Value, state.CurrentMeasurement.Value, value, weight);
+            }
+            else
+            {
+                throw new OperationCanceledException(state.CurrentCountable.Value.Name + " has a stopper added to it");
+            }
         }
 
         public void CheckState()
@@ -743,7 +778,7 @@ namespace Z3.Logic
             {
                 throw new OperationCanceledException("You must indicate what type of thing you are counting (something Countable like a Species).");
             }
-
+            
             if (!state.CurrentIndividual.Loaded)
             {
                 state.CurrentIndividual.Value = state.CurrentDataSet.Value.AddIndividual(state.CurrentCountable.Value, state.CurrentDataSet.Value);

@@ -304,6 +304,7 @@ namespace Z3.View
     {
         bool Enabled { set; }
         event EventHandler CountableNewClicked;
+      
     }
 
     public interface ActiveCountableElements

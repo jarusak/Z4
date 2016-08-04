@@ -98,7 +98,15 @@ namespace Z3
 
         private void InsertStopper_Click(object sender, EventArgs e)
         {
-            
+            if (listView1.SelectedItems.Count == 1)
+            {
+                if (StopperClicked != null)
+                {
+                    StopperClicked(sender, e);
+                }
+            }
         }
+
+        public event EventHandler StopperClicked;
     }
 }

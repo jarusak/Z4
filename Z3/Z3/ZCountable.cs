@@ -14,8 +14,7 @@ namespace Z3.Model {
         //private static ZCountable _instance = new ZCountable();
         //public static ZCountable FactoryInstance { get { return _instance; } }
         public static ZField HOTKEY_FIELD = ZField.getDummyField("hotkey", "int", "0");
-        private Dictionary<ZField, ZFieldValue> countableFields;
-     
+        
         //private static ZCountable readFromDB(int level, int id) {
         //    ZCountable c = new ZCountable();
         //    c.getExisting(level, id);
