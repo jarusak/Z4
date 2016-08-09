@@ -194,6 +194,7 @@
     </Compile>
     <Compile Include="MenuManager.cs">
     </Compile>
+    <Compile Include="MessageBoxEx.cs" />
     <Compile Include="MouseHook.cs" />
     <Compile Include="NewEntityForm.cs">
       <SubType>Form</SubType>

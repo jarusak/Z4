@@ -15,7 +15,7 @@ namespace Z3.View
     {
         FileElements Files { get; }
         ActiveFileElements ActiveFile { get; }
-        
+
         DataSetElements DataSets { get; }
         ActiveDataSetElements ActiveDataSet { get; }
 
@@ -27,6 +27,7 @@ namespace Z3.View
 
         ReadyControlElements Ready { get; }
         GlobalControlElements Global { get; }
+        StopperElement Stopper { get; }
         CalibControlElements Calibration { get; }
         WindowElements Display { get; }
 
@@ -53,6 +54,13 @@ namespace Z3.View
         {
             get { return _files; }
             set { _files = value; }
+        }
+
+        private StopperElement _stopper;
+        public StopperElement Stopper
+        {
+            get { return _stopper; }
+            set { _stopper = value; }
         }
 
         private ActiveFileElements _afiles;
@@ -207,7 +215,7 @@ namespace Z3.View
         }
 
         #endregion
-        
+
         #region WindowElements Members
 
         public MouseHook Hook
@@ -304,7 +312,7 @@ namespace Z3.View
     {
         bool Enabled { set; }
         event EventHandler CountableNewClicked;
-      
+
     }
 
     public interface ActiveCountableElements
@@ -315,7 +323,7 @@ namespace Z3.View
         event EventHandler CountableAssignHotkeyClicked;
         event EventHandler CountableClearHotkeyClicked;
     }
-    
+
     public interface ReadyControlElements
     {
         bool Enabled { set; }
@@ -330,6 +338,11 @@ namespace Z3.View
         event EventHandler SchemaEditorClicked;
         event EventHandler OptionsClicked;
         event EventHandler OneWindowClicked;
+    }
+
+    public interface StopperElement
+    {
+        event EventHandler StopperClicked;
     }
 
     public interface CalibControlElements

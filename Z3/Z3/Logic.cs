@@ -273,6 +273,7 @@ namespace Z3.Logic
             view.Files.FileOpenClicked += new System.EventHandler(Files_FileOpenClicked);
             view.Files.FileExitClicked += new System.EventHandler(Files_FileExitClicked);
             view.Global.OneWindowClicked += new System.EventHandler(Global_OneWindowClicked);
+            view.Stopper.StopperClicked += new System.EventHandler(Stopper_StopperClicked);
             state.CurrentWorkspace.Cleared += new EventHandler<ObjectEventArgs<Watcher<IWorkspace>>>(CurrentWorkspace_Cleared);
             state.CurrentWorkspace.Replaced += new EventHandler<ObjectEventArgs<Watcher<IWorkspace>>>(CurrentWorkspace_Replaced);
 
@@ -317,6 +318,32 @@ namespace Z3.Logic
             view.Display.Rearrange();
         }
 
+        void Stopper_StopperClicked(object sender, System.EventArgs e)
+        {
+            if (view.Progress.SelectedItems.Count == 1)
+            {
+                string name = view.Progress.SelectedItems[0].Text;
+
+                MessageBoxEx.Show("Stopper has been added to " + name + ".", "Verification");                
+
+                foreach (ZCountable c in state.CurrentWorkspace.Value.CountableStore.All)
+                {
+                    if (c.Name.Equals(name))
+                    {
+                        Dictionary<ZField,ZFieldValue> feilds = c.GetValues();
+                        
+                        foreach (ZFieldValue v in feilds.Values)
+                        {
+                            if (v.Field.Name.Equals("Stopper"))
+                            {
+                                v.Value = "true";
+                                c.SetValues(feilds);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Open File workflow
         /// </summary>

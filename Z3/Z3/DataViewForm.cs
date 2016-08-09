@@ -5,10 +5,11 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Z3.View;
 
 namespace Z3
 {
-    public partial class DataViewForm : Form
+    public partial class DataViewForm : Form, StopperElement
     {
         public DataViewForm()
         {

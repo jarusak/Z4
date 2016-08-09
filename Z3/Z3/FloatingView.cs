@@ -348,6 +348,7 @@ namespace Z3.View.Floating
             //fac.Display
             fac.Files = _menu;
             fac.Global = _menu;
+            fac.Stopper = _menu;
             fac.MeasurementCtl = _primary.MTypes;
             fac.Ready = new RCESplitter(rcelist);
             fac.Progress = _progress.Data;

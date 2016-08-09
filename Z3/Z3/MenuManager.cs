@@ -13,7 +13,7 @@ namespace Z3.View.Impl
     public class MenuElementsImpl : FileElements, ActiveFileElements, 
         DataSetElements, ActiveDataSetElements, ActiveDataPointElements, 
         CountableElements, ActiveCountableElements, ReadyControlElements, 
-        GlobalControlElements, CalibControlElements
+        GlobalControlElements, CalibControlElements, StopperElement
     {
         private Form _form;
 
@@ -259,6 +259,12 @@ namespace Z3.View.Impl
                 OneWindowClicked(sender, e);
         }
 
+        private void menuToolsStopper_Click(object sender, EventArgs e)
+        {
+            if (StopperClicked != null)
+                StopperClicked(sender, e);
+        }
+
         #endregion
 
         #region Help
@@ -320,6 +326,7 @@ namespace Z3.View.Impl
             this.menuToolsSep1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuToolsSchema = new System.Windows.Forms.ToolStripMenuItem();
             this.menuToolsOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuToolsStopper = new System.Windows.Forms.ToolStripMenuItem();
             this.menuVideo = new System.Windows.Forms.ToolStripMenuItem();
             this.menuVideoOneWindow = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -529,7 +536,8 @@ namespace Z3.View.Impl
             this.menuToolsZoom,
             this.menuToolsSep1,
             this.menuToolsSchema,
-            this.menuToolsOptions});
+            this.menuToolsOptions,
+            this.menuToolsStopper});
             this.menuTools.Name = "menuTools";
             this.menuTools.Size = new System.Drawing.Size(48, 20);
             this.menuTools.Text = "Tools";
@@ -588,6 +596,13 @@ namespace Z3.View.Impl
             this.menuToolsOptions.Size = new System.Drawing.Size(163, 22);
             this.menuToolsOptions.Text = "Options...";
             this.menuToolsOptions.Click += new EventHandler(menuToolsOptions_Click);
+            // 
+            // menuToolsStopper
+            // 
+            this.menuToolsStopper.Name = "menuToolsStopper";
+            this.menuToolsStopper.Size = new System.Drawing.Size(163, 22);
+            this.menuToolsStopper.Text = "Insert Stopper";
+            this.menuToolsStopper.Click += new EventHandler(menuToolsStopper_Click);
             // 
             // menuVideo
             // 
@@ -693,6 +708,7 @@ namespace Z3.View.Impl
         private System.Windows.Forms.ToolStripSeparator menuToolsSep0;
         private System.Windows.Forms.ToolStripSeparator menuToolsSep1;
         private System.Windows.Forms.ToolStripMenuItem menuToolsOptions;
+        private System.Windows.Forms.ToolStripMenuItem menuToolsStopper;
         private System.Windows.Forms.ToolStripMenuItem menuVideo;
         private System.Windows.Forms.ToolStripMenuItem menuVideoOneWindow;
         private System.Windows.Forms.ToolStripMenuItem menuToolsSchema;
@@ -878,6 +894,7 @@ namespace Z3.View.Impl
         public event EventHandler SchemaEditorClicked;
         public event EventHandler OptionsClicked;
         public event EventHandler OneWindowClicked;
+        public event EventHandler StopperClicked;
 
         #endregion
 

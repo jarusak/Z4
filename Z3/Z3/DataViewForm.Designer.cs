@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace Z3
 {
@@ -95,18 +96,21 @@ namespace Z3
         private System.Windows.Forms.TextBox errorBox;
         private System.Windows.Forms.ContextMenuStrip dataMenu;
         private System.Windows.Forms.ToolStripMenuItem stopperToolStripMenuItem;
+        public event EventHandler StopperClicked;
 
         private void InsertStopper_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count == 1)
+            //if (listView1.SelectedItems.Count == 1)
+            //{
+            Debug.WriteLine("YO");
+            if (StopperClicked != null)
             {
-                if (StopperClicked != null)
-                {
-                    StopperClicked(sender, e);
-                }
+               Debug.WriteLine("YO");
+               StopperClicked(sender, e);
             }
+            //}
         }
 
-        public event EventHandler StopperClicked;
+        
     }
 }
