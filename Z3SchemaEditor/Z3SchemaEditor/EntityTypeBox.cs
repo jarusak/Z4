@@ -19,6 +19,7 @@ namespace Z3SchemaEditor
         public EntityTypeBox()
         {
             InitializeComponent();
+            this.FormClosing += new FormClosingEventHandler(OnFormClosing);
             fieldsList.ItemDrag += new ItemDragEventHandler(listView_ItemDrag);
             fieldsList.DragEnter += new DragEventHandler(listView_DragEnter);
             fieldsList.DragOver += new DragEventHandler(listView_DragOver);
@@ -26,6 +27,11 @@ namespace Z3SchemaEditor
             fieldsList.DragDrop += new DragEventHandler(listView_DragDrop);
         }
 
+        private void OnFormClosing(object sender, EventArgs e)
+        {
+            if (Switch) Value.SwitchField(Value.Fields, fieldsList);
+        }
+        
         bool privateDrag;
 
         private void listView_ItemDrag(object sender, ItemDragEventArgs e)
@@ -106,7 +112,30 @@ namespace Z3SchemaEditor
             // Remove the original copy of the dragged item.
             fieldsList.Items.Remove(draggedItem);
 
+            changeInFeilds();
+
             Switch = true;
+        }
+
+        // changes the locally saved ZFeilds to matcth the drag and drop change
+        private void changeInFeilds()
+        {
+            for (int i = 0; i < fieldsList.Items.Count; i++)
+            {
+                if (!fieldsList.Items[i].Text.Equals(_value.Fields[i].Name))
+                {
+                    for (int j = 0; j < _value.Fields.Count; j++)
+                    {
+                        if (fieldsList.Items[i].Text.Equals(_value.Fields[j].Name))
+                        {
+                            ZField temp = new ZField();
+                            temp = _value.Fields[j];
+                            _value.Fields[j] = _value.Fields[i];
+                            _value.Fields[i] = temp;
+                        }
+                    }
+                }
+            }
         }
 
         public ZLevel Value
@@ -149,6 +178,8 @@ namespace Z3SchemaEditor
 
         private void editButton_Click(object sender, EventArgs e)
         {
+            callSwtich();
+
             if (fieldsList.SelectedItems.Count > 0)
             {
                 if (canChange())
@@ -157,7 +188,9 @@ namespace Z3SchemaEditor
                     {
                         f.Value = ((ZField)fieldsList.SelectedItems[0].Tag);
                         f.ShowDialog();
+                        
                         Value.SaveField(f.Value);
+                        callSwtich();
                     }
                     refreshFields();
                 }
@@ -169,6 +202,11 @@ namespace Z3SchemaEditor
             nameBox_TextChanged(null, null);
             measurableBox_CheckedChanged(null, null);
 
+            callSwtich();
+        }
+
+        private void callSwtich()
+        {
             if (Switch) Value.SwitchField(Value.Fields, fieldsList);
         }
 

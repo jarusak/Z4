@@ -361,8 +361,9 @@ namespace Z3.Workspace
         {
             using (SqlCeCommand cmd = _conn.CreateCommand())
             {
-                cmd.CommandText = "insert into Z3" + _table + "Fields (name, level) values(?, ?)";
+                cmd.CommandText = "insert into Z3" + _table + "Fields (name, label,  \"default\", level) values(@name, @label, '''''', @lvl)";
                 cmd.Parameters.AddWithValue("@name", p);
+                cmd.Parameters.AddWithValue("@label", p);
                 cmd.Parameters.AddWithValue("@lvl", zLevel.ID);
                 cmd.ExecuteNonQuery();
             }

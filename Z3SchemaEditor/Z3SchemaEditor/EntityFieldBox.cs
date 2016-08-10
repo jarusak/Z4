@@ -15,6 +15,7 @@ namespace Z3SchemaEditor
     {
         private ListView fieldsList;
         private string orignalText;
+        public bool closing = false;
 
         public EntityFieldBox(ListView fieldsList)
         {
@@ -40,7 +41,7 @@ namespace Z3SchemaEditor
             {
                 _value = value;
                 nameBox.Text = _value.Name;
-                defaultBox.Text = _value.Default;
+                defaultBox.Text = _value.Default;   
 
                 if (_value.Type.Equals("combobox"))
                 {
@@ -65,12 +66,8 @@ namespace Z3SchemaEditor
         }
 
         private void okButton_Click(object sender, EventArgs e)
-        {
-            if (fieldsList.FindItemWithText(nameBox.Text) != null && !orignalText.Equals(nameBox.Text))
-            {
-                MessageBoxEx.Show(this, "This name has already been added.", "Validation Error");
-            }
-            else
+        {         
+            if (validate())
             { 
                 _value.Name = nameBox.Text.Replace(" ", "");
                 _value.Label = labelBox.Text.Replace(" ", "");
@@ -97,6 +94,53 @@ namespace Z3SchemaEditor
                     }
                 }
             }
+        }
+
+        private bool validate()
+        { 
+            if (string.IsNullOrWhiteSpace(nameBox.Text))
+            {
+                MessageBoxEx.Show("The Name feild cannot be left empty.");
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(labelBox.Text))
+            {
+                MessageBoxEx.Show("The Label feild cannot be left empty.");
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(defaultBox.Text))
+            {
+                MessageBoxEx.Show("The Default feild cannot be left empty.");
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(typeLenBox.Text))
+            {
+                MessageBoxEx.Show("The small Type Length feild cannot be left empty.");
+                return false;
+            }
+            try
+            {
+                if(Convert.ToInt32(typeLenBox.Text) < 1)
+                {
+                    MessageBoxEx.Show("You cannot have a negitive number for the Type Length Feild");
+                    return false;
+                }
+            }
+            catch (Exception) {
+                MessageBoxEx.Show("Your Type Length feild is in the wrong format.");
+                return false;
+            }
+
+            for (int i = 0; i < fieldsList.Items.Count; i++)
+            {
+                if (fieldsList.Items[i].Text.Equals(nameBox.Text) && !orignalText.Equals(nameBox.Text))
+                {
+                    MessageBoxEx.Show(this, "This name has already been added.", "Validation Error");
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private bool sizable;
