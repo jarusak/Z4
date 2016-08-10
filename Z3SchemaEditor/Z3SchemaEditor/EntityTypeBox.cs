@@ -151,13 +151,16 @@ namespace Z3SchemaEditor
         {
             if (fieldsList.SelectedItems.Count > 0)
             {
-                using (EntityFieldBox f = new EntityFieldBox(fieldsList))
+                if (canChange())
                 {
-                    f.Value = ((ZField)fieldsList.SelectedItems[0].Tag);
-                    f.ShowDialog();
-                    Value.SaveField(f.Value);
+                    using (EntityFieldBox f = new EntityFieldBox(fieldsList))
+                    {
+                        f.Value = ((ZField)fieldsList.SelectedItems[0].Tag);
+                        f.ShowDialog();
+                        Value.SaveField(f.Value);
+                    }
+                    refreshFields();
                 }
-                refreshFields();
             }
         }
 
@@ -192,10 +195,24 @@ namespace Z3SchemaEditor
         {
             if (fieldsList.SelectedItems.Count > 0)
             {
-                Value.DeleteField((ZField)fieldsList.SelectedItems[0].Tag);
-
-                refreshFields();
+                if (canChange())
+                {
+                    Value.DeleteField((ZField)fieldsList.SelectedItems[0].Tag);
+                    refreshFields();
+                }                 
             }
         }
+
+        private bool canChange()
+        {
+            ListViewItem item = fieldsList.SelectedItems[0];
+            if (item.Text.Equals("A") || item.Text.Equals("B") || item.Text.Equals("Stopper"))
+            {
+                MessageBoxEx.Show("You cannot change or delete this", "Validation Error");
+                return false;
+            }
+            return true;
+        }
+
     }
 }
