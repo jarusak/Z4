@@ -12,13 +12,13 @@ namespace Z3.Model{
         private double _weight;
         private WorkspaceInternals _ws;
 
-        public ZDataPoint(int id, int iid, int mtype, double value, double weight, WorkspaceInternals ws)
+        public ZDataPoint(int id, int iid, int mtype, double value, double Biomass, WorkspaceInternals ws)
         {
             _id = id;
             _individualID = iid;
             _mtype = mtype;
             _value = value;
-            _weight = weight;
+            _weight = Biomass;
             _ws = ws;
         }
 
@@ -69,7 +69,7 @@ namespace Z3.Model{
             }
         }
 
-        public double Weight
+        public double Biomass
         {
             get
             {

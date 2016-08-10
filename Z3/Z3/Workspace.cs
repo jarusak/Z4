@@ -1062,7 +1062,7 @@ namespace Z3.Workspace
     public static class Factory
     {
         private const string CREATE_INDIVIDUAL_TABLE = "CREATE TABLE Z3Individuals (internalid int identity, Container int not null, Countable int not null, ContainerLevel int not null, CountableLevel int not null, Comments ntext not null default(''));";
-        private const string CREATE_MEASUREMENT_TABLE = "CREATE TABLE Z3Measurements (internalid int identity, Individual int not null, Measurement int not null, Value float not null, Weight float not null default 0)";
+        private const string CREATE_MEASUREMENT_TABLE = "CREATE TABLE Z3Measurements (internalid int identity, Individual int not null, Measurement int not null, Value float not null, Biomass float not null default 0)";
 
         private const string UPG_V2_CREATE_REPORT_TABLE = "CREATE TABLE Z3Reports(internalid int IDENTITY PRIMARY KEY, name nvarchar(100) NOT NULL DEFAULT 'New Query', query ntext NOT NULL DEFAULT 'select 1');";
 
@@ -1429,10 +1429,10 @@ namespace Z3.Workspace
             }
         }
 
-        public ZDataPoint Add(ZMeasurement m, double value, double weight)
+        public ZDataPoint Add(ZMeasurement m, double value, double Biomass)
         {
             if (_points == null) loadDataPoints();
-            ZDataPoint retval = _ws.DataPoints.insert(_indiv, m, value, weight);
+            ZDataPoint retval = _ws.DataPoints.insert(_indiv, m, value, Biomass);
 
             _points.Add(retval);
             retval.Modified += new EventHandler(p_Modified);
@@ -1523,12 +1523,12 @@ namespace Z3.Workspace
             }
         }
 
-        public ZDataPoint insert(ZIndividual i, ZMeasurement m, double value, double weight)
+        public ZDataPoint insert(ZIndividual i, ZMeasurement m, double value, double Biomass)
         {
             if (_disposed) throw new ObjectDisposedException("DataPointManager");
 
-            int id = createInDB(i.ID, m.ID, value, weight);
-            ZDataPoint d = new ZDataPoint(id, i.ID, m.ID, value, weight, _ws);
+            int id = createInDB(i.ID, m.ID, value, Biomass);
+            ZDataPoint d = new ZDataPoint(id, i.ID, m.ID, value, Biomass, _ws);
             return d;
         }
 
@@ -1547,18 +1547,18 @@ namespace Z3.Workspace
             dp.Dispose();
         }
 
-        internal int createInDB(int individual, int mtype, double value, double weight)
+        internal int createInDB(int individual, int mtype, double value, double Biomass)
         {
             if (_disposed) throw new ObjectDisposedException("DataPointManager");
 
             using (SqlCeCommand cmd = _ws.Connection.CreateCommand())
             {
                 cmd.CommandText =
-                    "insert into Z3Measurements (Individual, Measurement, Value, Weight) values(" +
+                    "insert into Z3Measurements (Individual, Measurement, Value, Biomass) values(" +
                     individual + ", " +
                     mtype + ", " +
                     value + ", " +
-                    weight + ")";
+                    Biomass + ")";
                 if (cmd.ExecuteNonQuery() != 1)
                     throw new InvalidOperationException("Could not insert measurement record");
             }
@@ -1575,7 +1575,7 @@ namespace Z3.Workspace
                 Convert.ToInt32(r["individual"]),
                 Convert.ToInt32(r["measurement"]),
                 Convert.ToDouble(r["value"]),
-                Convert.ToDouble(r["weight"]),
+                Convert.ToDouble(r["Biomass"]),
                 _ws);
             return m;
         }

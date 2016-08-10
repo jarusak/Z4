@@ -751,7 +751,7 @@ namespace Z3.View.Impl
         {
             set
             {
-                _form.Text = "Z3 - [" + value + "]";
+                _form.Text = "Z4 - [" + value + "]";
             }
         }
 
@@ -761,7 +761,7 @@ namespace Z3.View.Impl
             {
                 if (value == false)
                 {
-                    _form.Text = "Z3 - <No Workspace>";
+                    _form.Text = "Z4 - <No Workspace>";
                 }
 
                 menuFileExport.Enabled = value;

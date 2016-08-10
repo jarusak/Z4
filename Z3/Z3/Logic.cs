@@ -697,11 +697,11 @@ namespace Z3.Logic
         {
             try
             {
-                // caculate the estamated weight
+                // caculate the estamated Biomass
                 Dictionary<ZField, ZFieldValue> countableFields = view.CountableCtl.ContextMenuSubject.GetValues();
                 int a = 0;
                 int b = 0;
-                double weight = 0;
+                double Biomass = 0;
 
                 foreach (ZFieldValue v in countableFields.Values)
                 {
@@ -715,9 +715,9 @@ namespace Z3.Logic
                     }
                 }
 
-                weight = a + b + e.convertedLength;
+                Biomass = a * Math.Pow(e.convertedLength, b);
                 
-                Measure(e.convertedLength, weight);
+                Measure(e.convertedLength, Biomass);
             }
             catch (OperationCanceledException ex)
             {
@@ -754,7 +754,7 @@ namespace Z3.Logic
             }
         }
 
-        public void Measure(double value, double weight)
+        public void Measure(double value, double Biomass)
         {
             CheckState();
 
@@ -771,7 +771,7 @@ namespace Z3.Logic
 
             if (!stopper)
             {
-                Measure(state.CurrentIndividual.Value, state.CurrentMeasurement.Value, value, weight);
+                Measure(state.CurrentIndividual.Value, state.CurrentMeasurement.Value, value, Biomass);
             }
             else
             {
@@ -853,7 +853,7 @@ namespace Z3.Logic
             state.CurrentDataPoint.Value = point;
         }
 
-        public void Measure(ZIndividual indiv, ZMeasurement mtype, double value, double weight)
+        public void Measure(ZIndividual indiv, ZMeasurement mtype, double value, double Biomass)
         {
             if (!mtype.Measured)
             {
@@ -878,7 +878,7 @@ namespace Z3.Logic
                 auto.Value = 1;
             }
 
-            ZDataPoint point = indiv.DataPoints.Add(mtype, value, weight);
+            ZDataPoint point = indiv.DataPoints.Add(mtype, value, Biomass);
             state.CurrentDataPoint.Value = point;
         }
 
@@ -1360,8 +1360,9 @@ namespace Z3.Logic
                     if (bf.ShowDialog() == DialogResult.OK)
                     {
                         state.CurrentDataSet.Value = (ZDataSet)(_tree.SelectedItem);
+                        
                     }
-                    Debug.WriteLine("Currenet Data Set" + state.CurrentDataSet.Value);
+                    
                     state.CurrentWorkspace.Value.DataSetStore.ItemAdded -= myAdd;
                     state.CurrentWorkspace.Value.DataSetStore.ItemEdited -= myEdit;
                     state.CurrentWorkspace.Value.DataSetStore.ItemDeleted -= myDelete;
@@ -1864,7 +1865,7 @@ ORDER BY sum1 DESC";
             view.Progress.Clear();
         }
 
-        private void updateView()
+        public void updateView()
         {
             if (!state.CurrentDataSet.Loaded) return;
 
@@ -1885,6 +1886,7 @@ ORDER BY sum1 DESC";
                     }
                     else
                     {
+
                         rows.AddRange(getData(SUM_QUERY, m, state.CurrentDataSet.Value));
                         
                         foreach (ZDataSet dataset in datasets) {
@@ -1910,7 +1912,7 @@ ORDER BY sum1 DESC";
                 {         
                     ListViewItem current = view.Progress.Items.Add(state.CurrentWorkspace.Value.CountableStore.ByID(row[0], row[1]).Name);
                     Debug.WriteLine(row[0] + " " + row[1]);
-
+                    Debug.WriteLine("hello");
                     foreach (KeyValuePair<string, List<int[]>> sample in sampleData)
                     {
                         Boolean hasValue = false;

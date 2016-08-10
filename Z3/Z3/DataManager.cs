@@ -82,7 +82,7 @@ namespace Z3.View
             this.valColumn.Width = 300;
             this.CountableColumn.Text = "Countable Name";
             this.CountableColumn.Width = 300;
-            this.WeightColumn.Text = "Weight";
+            this.WeightColumn.Text = "Biomass";
             this.WeightColumn.Width = 50;
             // 
             // statusStrip1
@@ -266,7 +266,7 @@ namespace Z3.View
                 i.ID.ToString(),
                 p.MeasurementType.Name + "=" + p.Value,
                 i.Countable.Name,
-                p.Weight.ToString()
+                p.Biomass.ToString()
             });
             
             newItem.Tag = p;
