@@ -82,6 +82,18 @@ namespace Z3.Model {
             return Name;
         }
 
+        public bool Stopper()
+        {
+            foreach (ZFieldValue z in GetValues().Values)
+            {
+                if (z.Field.Name.Equals("Stopper"))
+                {
+                    return Convert.ToBoolean(z.ReadableValue);
+                }
+            }
+            return false;
+        }
+
         //public List<ZEntity> all() {
         //    List<ZEntity> retval = new List<ZEntity>();
         //    foreach (Dictionary<int, ZCountable> d in _cache.Values)

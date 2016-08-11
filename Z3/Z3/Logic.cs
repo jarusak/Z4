@@ -338,6 +338,7 @@ namespace Z3.Logic
                             {
                                 v.Value = "true";
                                 c.SetValues(feilds);
+                                view.Progress.SelectedItems[0].SubItems[1].Text = "-";
                             }
                         }
                     }
@@ -1912,7 +1913,7 @@ ORDER BY sum1 DESC";
                 {         
                     ListViewItem current = view.Progress.Items.Add(state.CurrentWorkspace.Value.CountableStore.ByID(row[0], row[1]).Name);
                     Debug.WriteLine(row[0] + " " + row[1]);
-                    Debug.WriteLine("hello");
+                    
                     foreach (KeyValuePair<string, List<int[]>> sample in sampleData)
                     {
                         Boolean hasValue = false;
@@ -1921,7 +1922,13 @@ ORDER BY sum1 DESC";
                             if(sample.Value[k][0] == row[0] && sample.Value[k][1] == row[1])
                             {
                                 hasValue = true;
-                                current.SubItems.Add(sample.Value[k][3].ToString());
+                                if (!state.CurrentWorkspace.Value.CountableStore.ByID(row[0], row[1]).Stopper())
+                                {
+                                    current.SubItems.Add(sample.Value[k][3].ToString());
+                                } else
+                                {
+                                    current.SubItems.Add("-");
+                                }
                             }
                         }
                         if (!hasValue)
