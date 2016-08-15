@@ -352,6 +352,7 @@ namespace Z3.View.Floating
             fac.MeasurementCtl = _primary.MTypes;
             fac.Ready = new RCESplitter(rcelist);
             fac.Progress = _progress.Data;
+            fac.ControlForm = _controlForm;
         }
 
         #region WindowElements Members

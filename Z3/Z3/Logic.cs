@@ -153,6 +153,7 @@ namespace Z3.Logic
             state.CurrentMeasurement.Cleared += new EventHandler<ObjectEventArgs<Watcher<ZMeasurement>>>(CurrentMeasurement_Cleared);
             view.Ready.RecalibrateClicked += new EventHandler(Ready_RecalibrateClicked);
             view.Display.Measurer.Calibrated += new EventHandler(Measurer_Calibrated);
+            
         }
 
         public event EventHandler MessageChanged;
@@ -270,6 +271,7 @@ namespace Z3.Logic
         protected override void Initialize()
         {   
             view.Files.FileNewClicked += new System.EventHandler(Files_FileNewClicked);
+           // view.Files.FullMenuClicked += new EventHandler(Files_FullMenuClicked);
             view.Files.FileOpenClicked += new System.EventHandler(Files_FileOpenClicked);
             view.Files.FileExitClicked += new System.EventHandler(Files_FileExitClicked);
             view.Global.OneWindowClicked += new System.EventHandler(Global_OneWindowClicked);
@@ -364,6 +366,8 @@ namespace Z3.Logic
             // Replace current Workspace with new one
             state.CurrentWorkspace.Value = w;
         }
+
+      
 
         /// <summary>
         /// New File workflow
@@ -653,6 +657,7 @@ namespace Z3.Logic
     public class CountingLogic : ALogic
     {
         public CountingLogic() : base("CountingLogic") { }
+
         private bool _counting;
         public bool Counting
         {
@@ -668,7 +673,7 @@ namespace Z3.Logic
                 {
                     view.Display.Measurer.clear();
                 }
-
+                
                 view.Display.TopMost = value;
                 view.Display.Measurer.Enabled = value;
                 view.Ready.Counting = value;
@@ -680,6 +685,13 @@ namespace Z3.Logic
             view.Ready.StartStopCountingClicked += new EventHandler(Ready_StartStopCountingClicked);
             view.Display.Measurer.Measure += new EventHandler<Zoopomatic2.Controls.Measurer.MeasureEventArgs>(Measurer_Measure);
             view.Display.Measurer.Count += new EventHandler(Measurer_Count);
+            view.Files.FullMenuClicked += new EventHandler(Files_FullMenuClicked);
+        }
+
+        void Files_FullMenuClicked(object sender, EventArgs e)
+        {
+            if(!view.Display.Measurer.Calibrating)
+                Counting = false;    
         }
 
         void Measurer_Count(object sender, EventArgs e)

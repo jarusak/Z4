@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Z3.Model;
 using Zoopomatic2.Controls;
 using Z3.Util;
+using Z3.View.Floating;
 
 namespace Z3.View
 {
@@ -36,6 +37,8 @@ namespace Z3.View
         ItemContainer<ZDataPoint> DataPointCtl { get; }
 
         ListView Progress { get; }
+
+        Z3FloatingControlsForm ControlForm { get; }
     }
 
     /// <summary>
@@ -175,6 +178,14 @@ namespace Z3.View
             }
         }
 
+        private Z3FloatingControlsForm _controlForm;
+
+        public Z3FloatingControlsForm ControlForm
+        {
+            get { return _controlForm; }
+
+            set { _controlForm = value; }
+        }
         public bool TopMost
         {
             get
@@ -274,6 +285,7 @@ namespace Z3.View
         event EventHandler FileNewClicked;
         event EventHandler FileOpenClicked;
         event EventHandler FileExitClicked;
+        event EventHandler FullMenuClicked;
     }
 
     public interface ActiveFileElements

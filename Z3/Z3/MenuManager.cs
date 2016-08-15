@@ -63,6 +63,11 @@ namespace Z3.View.Impl
 
         #region Menu Bar
         #region File
+        private void menuClicked(object sender, EventArgs e)
+        {
+            if (FullMenuClicked != null)
+                FullMenuClicked(sender, e);  
+        }
 
         //NEW
         private void menuFileNew_Click(object sender, EventArgs e)
@@ -350,6 +355,7 @@ namespace Z3.View.Impl
             this.menu.Size = new System.Drawing.Size(560, 24);
             this.menu.TabIndex = 1;
             this.menu.Text = "menuStrip1";
+           
             // 
             // menuFile
             // 
@@ -367,6 +373,7 @@ namespace Z3.View.Impl
             this.menuFile.Name = "menuFile";
             this.menuFile.Size = new System.Drawing.Size(37, 20);
             this.menuFile.Text = "File";
+            this.menuFile.DropDownOpening += new EventHandler(menuClicked);
             // 
             // menuFileNew
             // 
@@ -451,6 +458,7 @@ namespace Z3.View.Impl
             this.menuData.Name = "menuData";
             this.menuData.Size = new System.Drawing.Size(43, 20);
             this.menuData.Text = "Data";
+            this.menuData.DropDownOpening += new EventHandler(menuClicked);
             // 
             // menuDataSetNew
             // 
@@ -541,6 +549,7 @@ namespace Z3.View.Impl
             this.menuTools.Name = "menuTools";
             this.menuTools.Size = new System.Drawing.Size(48, 20);
             this.menuTools.Text = "Tools";
+            this.menuTools.DropDownOpening += new EventHandler(menuClicked);
             // 
             // menuToolsCounting
             // 
@@ -611,6 +620,8 @@ namespace Z3.View.Impl
             this.menuVideo.Name = "menuVideo";
             this.menuVideo.Size = new System.Drawing.Size(163, 22);
             this.menuVideo.Text = "View";
+            this.menuVideo.DropDownOpening += new EventHandler(menuClicked);
+
             // 
             // menuVideoOneWindow
             // 
@@ -630,6 +641,8 @@ namespace Z3.View.Impl
             this.menuHelp.Name = "menuHelp";
             this.menuHelp.Size = new System.Drawing.Size(44, 20);
             this.menuHelp.Text = "Help";
+            this.menuHelp.DropDownOpening += new EventHandler(menuClicked);
+
             // 
             // menuHelpContents
             // 
@@ -742,6 +755,7 @@ namespace Z3.View.Impl
         public event EventHandler FileNewClicked;
         public event EventHandler FileOpenClicked;
         public event EventHandler FileExitClicked;
+        public event EventHandler FullMenuClicked;
 
         #endregion
 
