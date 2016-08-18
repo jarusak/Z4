@@ -77,13 +77,13 @@ namespace Z3.View
             // individualColumn
             // 
             this.individualColumn.Text = "Individual";
-            this.individualColumn.Width = 50;
+            this.individualColumn.Width = 80;
             this.valColumn.Text = "Measurement";
-            this.valColumn.Width = 300;
+            this.valColumn.Width = 200;
             this.CountableColumn.Text = "Countable Name";
-            this.CountableColumn.Width = 300;
+            this.CountableColumn.Width = 270;
             this.WeightColumn.Text = "Biomass";
-            this.WeightColumn.Width = 50;
+            this.WeightColumn.Width = 70;
             // 
             // statusStrip1
             // 

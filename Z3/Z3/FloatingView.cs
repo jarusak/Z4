@@ -99,10 +99,11 @@ namespace Z3.View.Floating
             // Set up Windows Forms
             _controlForm = new Z3FloatingControlsForm();
             _dataPointsForm = new Z3FloatingMeasurementForm();
+            _dataPointsForm.ControlBox = false;
             _menuForm = new Z3FloatingMenuForm();
             _videoForm = new Z3FloatingVideoForm();
             _progress = new DataViewForm();
-            _meas = _videoForm.Measurer;
+             _meas = _videoForm.Measurer;
             _videoForm.Workspace.Controls.Add(_meas);
             _species = new SpeciesTreeWrapper(_primary.CountableTree);
 
@@ -240,11 +241,11 @@ namespace Z3.View.Floating
         {
             if (_intentionalClose) return;
             _intentionalClose = true;
-            _controlForm.Close();
-            _dataPointsForm.Close();
-            _videoForm.Close();
+            //_controlForm.Close();
+            //_dataPointsForm.Close();
+            //_videoForm.Close();
             _menuForm.Close();
-            _progress.Close();
+            //_progress.Close();
             _intentionalClose = false;
         }
 
@@ -262,34 +263,10 @@ namespace Z3.View.Floating
 
         void WindowElements.Rearrange()
         {
-            resize = false;
-            _menuForm.WindowState = FormWindowState.Maximized;
-            _menuForm.IsMdiContainer = true;
-            _menuForm.MaximizeBox = true;
-           // _menuForm.Resize += new EventHandler()
-            
-            Size clientArea = _menuForm.ClientSize;
-            clientArea.Height -= _menuForm.MainMenuStrip.Height;
+            //((WindowElements)this).Hide();
 
-            // children
-            _controlForm.MdiParent = _menuForm;
-            _progress.MdiParent = _menuForm;
-            _dataPointsForm.MdiParent = _menuForm;
-
-            // _controlForm
-            _controlForm.Height = Convert.ToInt32(0.6 * clientArea.Height);
-            _controlForm.Width = Convert.ToInt32(0.2 * clientArea.Width);
-            _controlForm.Location = new Point(clientArea.Width - _controlForm.Width - 5, 0);
-
-            // _progress
-            _progress.Height = Convert.ToInt32(0.4 * clientArea.Height) - 45;
-            _progress.Width = Convert.ToInt32(0.5 * clientArea.Width);
-            _progress.Location = new Point(0, clientArea.Height - _progress.Height - 45);
-
-            // _dataPointsForm
-            _dataPointsForm.Height = Convert.ToInt32(0.4 * clientArea.Height) - 45;
-            _dataPointsForm.Width = Convert.ToInt32(0.5 * clientArea.Width - 5);
-            _dataPointsForm.Location = new Point(_progress.Width, clientArea.Height - _progress.Height - 45);
+            //Form mainForm = new MainWindow(_menu,_videoForm, _controlForm, _progress, _dataPointsForm);
+            //mainForm.Show();
         }
 
         public event EventHandler<FormClosingEventArgs> ViewClosing;

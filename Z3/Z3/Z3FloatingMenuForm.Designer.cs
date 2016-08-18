@@ -36,7 +36,7 @@ namespace Z3.View.Floating {
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(100, 65);
             this.Name = "Z3FloatingMenuForm";
-            this.Text = "Z3";
+            this.Text = "Z4";
             this.ResumeLayout(false);
 
         }

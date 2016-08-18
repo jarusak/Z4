@@ -189,6 +189,12 @@
     </Compile>
     <Compile Include="IVideoManager.cs" />
     <Compile Include="Logic.cs" />
+    <Compile Include="MainWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainWindow.Designer.cs">
+      <DependentUpon>MainWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Measurer.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -253,6 +259,9 @@
     <EmbeddedResource Include="ImportForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ImportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainWindow.resx">
+      <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NewEntityForm.resx">
       <SubType>Designer</SubType>

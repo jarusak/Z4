@@ -582,18 +582,22 @@ namespace Z3.Logic
         }
 
         void CurrentDataSet_Replaced(object sender, ObjectEventArgs<Z3.State.Watcher<ZDataSet>> e)
-        {
-            // Refresh the data points view
-            view.DataPointCtl.Clear();
-            foreach (ZIndividual i in e.Value.Value.Individuals)
+        {            
+            if (e.Value.Value != null)
             {
-                
-                foreach (ZDataPoint p in i.DataPoints.GetAll())
+                // Refresh the data points view
+                view.DataPointCtl.Clear();
+
+                foreach (ZIndividual i in e.Value.Value.Individuals)
                 {
-                    view.DataPointCtl.Add(p);
+
+                    foreach (ZDataPoint p in i.DataPoints.GetAll())
+                    {
+                        view.DataPointCtl.Add(p);
+                    }
                 }
+                view.DataPoints.Enabled = true;
             }
-            view.DataPoints.Enabled = true;
         }
 
         void CurrentDataSet_Cleared(object sender, ObjectEventArgs<Z3.State.Watcher<ZDataSet>> e)
@@ -712,19 +716,19 @@ namespace Z3.Logic
             {
                 // caculate the estamated Biomass
                 Dictionary<ZField, ZFieldValue> countableFields = view.CountableCtl.ContextMenuSubject.GetValues();
-                int a = 0;
-                int b = 0;
+                double a = 0;
+                double b = 0;
                 double Biomass = 0;
 
                 foreach (ZFieldValue v in countableFields.Values)
                 {
                     if (v.Field.Name.Equals("A"))
                     {
-                        a = Int32.Parse(v.ReadableValue.ToString());
+                        a = Double.Parse(v.ReadableValue.ToString());
                     }
                     else if (v.Field.Name.Equals("B"))
                     {
-                        b = Int32.Parse(v.ReadableValue.ToString());
+                        b = Double.Parse(v.ReadableValue.ToString());
                     }
                 }
 
@@ -763,6 +767,7 @@ namespace Z3.Logic
                 Count(state.CurrentIndividual.Value, state.CurrentMeasurement.Value);
             } else
             {
+                Counting = false;
                 throw new OperationCanceledException(state.CurrentCountable.Value.Name + " has a stopper added to it");
             }
         }
@@ -788,6 +793,7 @@ namespace Z3.Logic
             }
             else
             {
+                Counting = false;
                 throw new OperationCanceledException(state.CurrentCountable.Value.Name + " has a stopper added to it");
             }
         }
@@ -811,6 +817,7 @@ namespace Z3.Logic
 
             if ((checkDS || !state.CurrentIndividual.Loaded) && !state.CurrentDataSet.Loaded)
             {
+                Counting = false;
                 throw new OperationCanceledException("You must select a valid data set to record data points into.");
             }
 
@@ -1421,7 +1428,10 @@ namespace Z3.Logic
         void CurrentDataSet_Replaced(object sender, ObjectEventArgs<Watcher<ZDataSet>> e)
         {
             view.ActiveDataSet.Enabled = true;
-            view.ActiveDataSet.Name = e.Value.Value.Name;
+            if (e.Value.Value != null)
+            {
+                view.ActiveDataSet.Name = e.Value.Value.Name;
+            }
         }
 
         void CurrentDataSet_Modified(object sender, ObjectEventArgs<Watcher<ZDataSet>> e)
@@ -1447,6 +1457,13 @@ namespace Z3.Logic
 
         void DataSetStore_ItemDeleted(object sender, ObjectEventArgs<ZDataSet> e)
         {
+            if (state.CurrentDataSet.Value != null)
+            {
+                if (state.CurrentDataSet.Value.ID == e.Value.ID)
+                {
+                    view.ActiveDataSet.Name = "<No Data Set>";
+                }
+            }
             _tree.Delete(e.Value);
         }
 
@@ -1889,7 +1906,7 @@ ORDER BY sum1 DESC";
                 List<ZDataSet> datasets = makeHeaders(mtypes);
                 
                 List<int[]> rows = new List<int[]>();
-                Dictionary<String, List<int[]>> sampleData = new Dictionary<string, List<int[]>>();
+                Dictionary<int, List<int[]>> sampleData = new Dictionary<int, List<int[]>>();
 
                 foreach (ZMeasurement m in mtypes)
                 {
@@ -1903,8 +1920,9 @@ ORDER BY sum1 DESC";
                         rows.AddRange(getData(SUM_QUERY, m, state.CurrentDataSet.Value));
                         
                         foreach (ZDataSet dataset in datasets) {
+                            Debug.WriteLine(dataset.Name);
                             List<int[]> result = getData(SUM_QUERY, m, dataset);
-                            sampleData.Add(dataset.Name,result);
+                            sampleData.Add(dataset.ID,result);
 
                             foreach (int[] row in result)
                             {
@@ -1926,7 +1944,7 @@ ORDER BY sum1 DESC";
                     ListViewItem current = view.Progress.Items.Add(state.CurrentWorkspace.Value.CountableStore.ByID(row[0], row[1]).Name);
                     Debug.WriteLine(row[0] + " " + row[1]);
                     
-                    foreach (KeyValuePair<string, List<int[]>> sample in sampleData)
+                    foreach (KeyValuePair<int, List<int[]>> sample in sampleData)
                     {
                         Boolean hasValue = false;
                         for(int k = 0; k < sample.Value.Count; k++)

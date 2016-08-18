@@ -301,8 +301,8 @@ namespace Z3SchemaEditor
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contentsToolStripMenuItem,
             this.toolStripMenuItem2,
-            this.lTERSoftwareToolStripMenuItem,
-            this.toolStripMenuItem3,
+           // this.lTERSoftwareToolStripMenuItem,
+           // this.toolStripMenuItem3,
             this.aboutZ3SchemaEditorToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
@@ -312,7 +312,7 @@ namespace Z3SchemaEditor
             // 
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             this.contentsToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.contentsToolStripMenuItem.Text = "Contents";
+            this.contentsToolStripMenuItem.Text = "Z4 Schema Editor Documentation";
             this.contentsToolStripMenuItem.Click += new System.EventHandler(this.contentsToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
@@ -322,10 +322,10 @@ namespace Z3SchemaEditor
             // 
             // lTERSoftwareToolStripMenuItem
             // 
-            this.lTERSoftwareToolStripMenuItem.Name = "lTERSoftwareToolStripMenuItem";
-            this.lTERSoftwareToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.lTERSoftwareToolStripMenuItem.Text = "NTL LTER Software Website";
-            this.lTERSoftwareToolStripMenuItem.Click += new System.EventHandler(this.lTERSoftwareToolStripMenuItem_Click);
+            //this.lTERSoftwareToolStripMenuItem.Name = "lTERSoftwareToolStripMenuItem";
+            //this.lTERSoftwareToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            //this.lTERSoftwareToolStripMenuItem.Text = "NTL LTER Software Website";
+            //this.lTERSoftwareToolStripMenuItem.Click += new System.EventHandler(this.lTERSoftwareToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
@@ -336,7 +336,7 @@ namespace Z3SchemaEditor
             // 
             this.aboutZ3SchemaEditorToolStripMenuItem.Name = "aboutZ3SchemaEditorToolStripMenuItem";
             this.aboutZ3SchemaEditorToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
-            this.aboutZ3SchemaEditorToolStripMenuItem.Text = "About Z3 Schema Editor...";
+            this.aboutZ3SchemaEditorToolStripMenuItem.Text = "About Z4 Schema Editor...";
             this.aboutZ3SchemaEditorToolStripMenuItem.Click += new System.EventHandler(this.aboutZ3SchemaEditorToolStripMenuItem_Click);
             // 
             // tabControl1

@@ -28,6 +28,11 @@ namespace Z3.View.Impl
             _form.MainMenuStrip = menu;
         }
         
+        public MenuStrip Menu
+        {
+            get { return menu; }
+        }
+
         /*internal void EnableData(bool p)
         {
             menuDataCountableDelete.Enabled = p;
@@ -276,12 +281,12 @@ namespace Z3.View.Impl
 
         private void menuHelpContents_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://lter.limnology.wisc.edu/software/Z3:Help");
+            System.Diagnostics.Process.Start("https://docs.google.com/document/d/1Uk6yMzOrIZRMSCufl3yE4pmxOfqUyi8gAhKoOnll79g/edit?usp=sharing");
         }
 
         private void menuHelpSoftwareWiki_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://lter.limnology.wisc.edu/software/");
+            System.Diagnostics.Process.Start("https://docs.google.com/document/d/1K7A5BBnccoQgsEvukcdPFWcT29chHnnjE6ntXNBrc7s/edit?usp=sharing");
         }
 
         private void menuHelpAbout_Click(object sender, EventArgs e)
@@ -355,7 +360,7 @@ namespace Z3.View.Impl
             this.menu.Size = new System.Drawing.Size(560, 24);
             this.menu.TabIndex = 1;
             this.menu.Text = "menuStrip1";
-           
+            
             // 
             // menuFile
             // 
@@ -449,7 +454,7 @@ namespace Z3.View.Impl
             this.menuDataSetProperties,
             this.menuDataSetDelete,
             this.menuDataSep0,
-            this.menuDataPointEdit,
+           // this.menuDataPointEdit,
             this.menuDataPointDelete,
             this.menuDataSep1,
             this.menuDataCountableNew,
@@ -615,8 +620,8 @@ namespace Z3.View.Impl
             // 
             // menuVideo
             // 
-            this.menuVideo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuVideoOneWindow});
+            //this.menuVideo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            //this.menuVideoOneWindow});
             this.menuVideo.Name = "menuVideo";
             this.menuVideo.Size = new System.Drawing.Size(163, 22);
             this.menuVideo.Text = "View";
@@ -648,7 +653,7 @@ namespace Z3.View.Impl
             // 
             this.menuHelpContents.Name = "menuHelpContents";
             this.menuHelpContents.Size = new System.Drawing.Size(200, 22);
-            this.menuHelpContents.Text = "Contents";
+            this.menuHelpContents.Text = "Z4 Documentation";
             this.menuHelpContents.Click +=new EventHandler(menuHelpContents_Click);
             // 
             // menuHelpSep0
@@ -660,7 +665,7 @@ namespace Z3.View.Impl
             // 
             this.menuHelpSoftwareWiki.Name = "menuHelpSoftwareWiki";
             this.menuHelpSoftwareWiki.Size = new System.Drawing.Size(200, 22);
-            this.menuHelpSoftwareWiki.Text = "NTL LTER Software Website";
+            this.menuHelpSoftwareWiki.Text = "Z4 Schema Editor Documentation";
             this.menuHelpSoftwareWiki.Click += new EventHandler(menuHelpSoftwareWiki_Click);
             // 
             // menuHelpSep1
@@ -672,7 +677,7 @@ namespace Z3.View.Impl
             // 
             this.menuHelpAbout.Name = "menuHelpAbout";
             this.menuHelpAbout.Size = new System.Drawing.Size(200, 22);
-            this.menuHelpAbout.Text = "About Z3...";
+            this.menuHelpAbout.Text = "About Z4...";
             this.menuHelpAbout.Click += new EventHandler(menuHelpAbout_Click);
 
             //this.menu.Resize += new EventHandler(sendToTray);

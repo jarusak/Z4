@@ -62,8 +62,8 @@ namespace Z3
             // 
             // datatMenu
             // 
-            this.dataMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.stopperToolStripMenuItem});
+            //this.dataMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            //this.stopperToolStripMenuItem});
             this.dataMenu.Name = "dataMenu";
             this.dataMenu.Size = new System.Drawing.Size(165, 22);
             // 
@@ -81,6 +81,7 @@ namespace Z3
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(241, 119);
+            this.ControlBox = false;
             this.Controls.Add(this.errorBox);
             this.Controls.Add(this.listView1);
             this.Name = "DataViewForm";

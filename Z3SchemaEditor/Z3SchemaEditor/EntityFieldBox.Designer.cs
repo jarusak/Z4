@@ -129,6 +129,7 @@ namespace Z3SchemaEditor
             this.label3.Size = new System.Drawing.Size(36, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Label:";
+            this.toolTip1.SetToolTip(this.label3, "Just keep this field the same as the Name field. ");
             // 
             // labelBox
             // 
@@ -212,6 +213,7 @@ namespace Z3SchemaEditor
             this.label7.Size = new System.Drawing.Size(45, 13);
             this.label7.TabIndex = 7;
             this.label7.Text = "To Add:";
+            this.toolTip1.SetToolTip(this.label7, "Items that will be added");
             // 
             // label6
             // 
@@ -221,6 +223,7 @@ namespace Z3SchemaEditor
             this.label6.Size = new System.Drawing.Size(41, 13);
             this.label6.TabIndex = 6;
             this.label6.Text = "Added:";
+            this.toolTip1.SetToolTip(this.label6, "Item already added to combobox");
             // 
             // listBox2
             // 
@@ -276,6 +279,8 @@ namespace Z3SchemaEditor
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
             this.button2.Text = "Delete";
+            this.toolTip1.SetToolTip(this.button2, "Select item in either boxes and then clcik the Delete button to delete the entry." +
+        "");
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.DeleteButton_Click);
             // 

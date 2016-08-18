@@ -97,7 +97,7 @@ namespace Z3SchemaEditor
 
         private void contentsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://lter.limnology.wisc.edu/software/Z3");
+            System.Diagnostics.Process.Start("https://docs.google.com/document/d/1K7A5BBnccoQgsEvukcdPFWcT29chHnnjE6ntXNBrc7s/edit?usp=sharing");
         }
 
         private void lTERSoftwareToolStripMenuItem_Click(object sender, EventArgs e)

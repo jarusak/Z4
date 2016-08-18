@@ -113,23 +113,23 @@ namespace Z3SchemaEditor
                 MessageBoxEx.Show("The Default feild cannot be left empty.");
                 return false;
             }
-            if (string.IsNullOrWhiteSpace(typeLenBox.Text))
-            {
-                MessageBoxEx.Show("The small Type Length feild cannot be left empty.");
-                return false;
-            }
-            try
-            {
-                if(Convert.ToInt32(typeLenBox.Text) < 1)
-                {
-                    MessageBoxEx.Show("You cannot have a negitive number for the Type Length Feild");
-                    return false;
-                }
-            }
-            catch (Exception) {
-                MessageBoxEx.Show("Your Type Length feild is in the wrong format.");
-                return false;
-            }
+            //if (string.IsNullOrWhiteSpace(typeLenBox.Text))
+            //{
+            //    MessageBoxEx.Show("The small Type Length feild cannot be left empty.");
+            //    return false;
+            //}
+            //try
+            //{
+            //    if(Convert.ToInt32(typeLenBox.Text) < 1)
+            //    {
+            //        MessageBoxEx.Show("You cannot have a negitive number for the Type Length Feild");
+            //        return false;
+            //    }
+            //}
+            //catch (Exception) {
+            //    MessageBoxEx.Show("Your Type Length feild is in the wrong format.");
+            //    return false;
+            //}
 
             for (int i = 0; i < fieldsList.Items.Count; i++)
             {

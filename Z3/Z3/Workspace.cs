@@ -1279,6 +1279,7 @@ namespace Z3.Workspace
                 }
                 sb.Append(" not null default ");
                 sb.Append(f.Default);
+                Debug.WriteLine(sb.ToString());
             }
             sb.Append(");");
             Debug.WriteLine(sb.ToString());
