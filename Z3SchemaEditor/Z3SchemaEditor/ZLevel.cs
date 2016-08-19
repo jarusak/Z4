@@ -370,26 +370,29 @@ namespace Z3.Workspace
             forceReload();
         }
 
-        public void SwitchField(List<ZField> fields, ListView fieldsList, String table)
+        public void SwitchField(List<ZField> fields, List<int> oldIds, String table)
         {
             int count = 0;
 
-            foreach (ListViewItem item in fieldsList.Items)
+            foreach (ZField zf in fields)
             {
-                ZField targetField = fields.Find(x => x.Name.Contains(item.Text));
-
+               // ZField targetField = fields.Find(x => x.Name.Contains(item.Text));
+                
                 using (SqlCeCommand cmd = _conn.CreateCommand())
                 {
                     cmd.CommandText = "update Z3" + table + "Fields set name=@name, label=@label, \"default\"=@default, type=@type where internalid=@iid";
 
                     cmd.Parameters.Clear();
 
-                    cmd.Parameters.AddWithValue("@name", targetField.Name);
-                    cmd.Parameters.AddWithValue("@label", targetField.Label);
-                    cmd.Parameters.AddWithValue("@default", targetField.Default);
-                    cmd.Parameters.AddWithValue("@type", targetField.Type);
-                    cmd.Parameters.AddWithValue("@iid", fields[count].Id);
+                    cmd.Parameters.AddWithValue("@name", zf.Name);
+                    cmd.Parameters.AddWithValue("@label", zf.Label);
+                    cmd.Parameters.AddWithValue("@default", zf.Default);
+                    cmd.Parameters.AddWithValue("@type", zf.Type);
+                    cmd.Parameters.AddWithValue("@iid", oldIds[count]);
 
+                    zf.Id = oldIds[count];
+
+                    //Debug.WriteLine("ID: " + fields[count].Id);
                     cmd.ExecuteNonQuery();
                 }
                 count++;
@@ -558,9 +561,9 @@ namespace Z3.Model {
             _mgr.AddField(this, _table, p);
         }
 
-        public void SwitchField(List<ZField> fields, ListView fieldsList)
+        public void SwitchField(List<ZField> fields, List<int> oldIds)
         {
-            _mgr.SwitchField(fields, fieldsList, _table);
+            _mgr.SwitchField(fields, oldIds,  _table);
         }
 
         public void DeleteField(ZField f)

@@ -13,13 +13,12 @@ namespace Z3SchemaEditor
     public partial class EntityTypeBox : Form
     {
         private bool Switch;
-        private bool lastItemPlaceBottom;
+        private bool lastItemPlaceBottom = false;
         private string text;
-
+        private List<int> oldIds;
         public EntityTypeBox()
         {
             InitializeComponent();
-            this.FormClosing += new FormClosingEventHandler(OnFormClosing);
             fieldsList.ItemDrag += new ItemDragEventHandler(listView_ItemDrag);
             fieldsList.DragEnter += new DragEventHandler(listView_DragEnter);
             fieldsList.DragOver += new DragEventHandler(listView_DragOver);
@@ -27,11 +26,6 @@ namespace Z3SchemaEditor
             fieldsList.DragDrop += new DragEventHandler(listView_DragDrop);
         }
 
-        private void OnFormClosing(object sender, EventArgs e)
-        {
-            if (Switch) Value.SwitchField(Value.Fields, fieldsList);
-        }
-        
         bool privateDrag;
 
         private void listView_ItemDrag(object sender, ItemDragEventArgs e)
@@ -51,7 +45,6 @@ namespace Z3SchemaEditor
             Point targetPoint = fieldsList.PointToClient(new Point(e.X, e.Y));         
             int targetIndex = fieldsList.InsertionMark.NearestIndex(targetPoint);
 
-            Debug.WriteLine(targetIndex);
             if (targetIndex == fieldsList.Items.Count - 1)
             {
                 Rectangle itemBounds = fieldsList.GetItemRect(targetIndex);
@@ -66,6 +59,7 @@ namespace Z3SchemaEditor
                 }
             } else {
                 fieldsList.InsertionMark.AppearsAfterItem = false;
+                lastItemPlaceBottom = false;
             }
 
             // Set the location of the insertion mark. If the mouse is
@@ -98,7 +92,7 @@ namespace Z3SchemaEditor
             // Insert a copy of the dragged item at the target index.
             // A copy must be inserted before the original item is removed
             // to preserve item index values. 
-            
+            Debug.WriteLine(lastItemPlaceBottom);
             if (!lastItemPlaceBottom)
             {
                 fieldsList.Items.Insert(
@@ -112,14 +106,22 @@ namespace Z3SchemaEditor
             // Remove the original copy of the dragged item.
             fieldsList.Items.Remove(draggedItem);
 
-            changeInFeilds();
-
             Switch = true;
+
+            oldIds = changeInFeilds();
+
+            callSwitch();
         }
 
-        // changes the locally saved ZFeilds to matcth the drag and drop change
-        private void changeInFeilds()
+        // changes the locally saved ZFeilds to match the drag and drop change
+        private List<int> changeInFeilds()
         {
+            List<int> oldIDs = new List<int>();
+            for (int i = 0; i < _value.Fields.Count; i++)
+            {
+                oldIDs.Add(_value.Fields[i].Id);
+            }
+
             for (int i = 0; i < fieldsList.Items.Count; i++)
             {
                 if (!fieldsList.Items[i].Text.Equals(_value.Fields[i].Name))
@@ -136,6 +138,11 @@ namespace Z3SchemaEditor
                     }
                 }
             }
+            return oldIDs;
+            //for (int i = 0; i < fieldsList.Items.Count; i++)
+            //{
+            //    Debug.WriteLine("chnage in feilds: " + _value.Fields[i].Name);
+            //}
         }
 
         public ZLevel Value
@@ -178,8 +185,6 @@ namespace Z3SchemaEditor
 
         private void editButton_Click(object sender, EventArgs e)
         {
-            callSwtich();
-
             if (fieldsList.SelectedItems.Count > 0)
             {
                 if (canChange())
@@ -188,9 +193,7 @@ namespace Z3SchemaEditor
                     {
                         f.Value = ((ZField)fieldsList.SelectedItems[0].Tag);
                         f.ShowDialog();
-                        
                         Value.SaveField(f.Value);
-                        callSwtich();
                     }
                     refreshFields();
                 }
@@ -201,13 +204,11 @@ namespace Z3SchemaEditor
         {
             nameBox_TextChanged(null, null);
             measurableBox_CheckedChanged(null, null);
-
-            callSwtich();
         }
 
-        private void callSwtich()
+        private void callSwitch()
         {
-            if (Switch) Value.SwitchField(Value.Fields, fieldsList);
+            if (Switch) Value.SwitchField(_value.Fields, oldIds);
         }
 
         private void addButton_Click(object sender, EventArgs e)
@@ -236,6 +237,7 @@ namespace Z3SchemaEditor
                 if (canChange())
                 {
                     Value.DeleteField((ZField)fieldsList.SelectedItems[0].Tag);
+                   
                     refreshFields();
                 }                 
             }
