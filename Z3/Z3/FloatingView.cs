@@ -263,10 +263,10 @@ namespace Z3.View.Floating
 
         void WindowElements.Rearrange()
         {
-            //((WindowElements)this).Hide();
+            ((WindowElements)this).Hide();
 
-            //Form mainForm = new MainWindow(_menu,_videoForm, _controlForm, _progress, _dataPointsForm);
-            //mainForm.Show();
+            Form mainForm = new MainWindow(_menu, _videoForm, _controlForm, _progress, _dataPointsForm);
+            mainForm.Show();
         }
 
         public event EventHandler<FormClosingEventArgs> ViewClosing;

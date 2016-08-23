@@ -620,8 +620,8 @@ namespace Z3.View.Impl
             // 
             // menuVideo
             // 
-            //this.menuVideo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            //this.menuVideoOneWindow});
+            this.menuVideo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuVideoOneWindow});
             this.menuVideo.Name = "menuVideo";
             this.menuVideo.Size = new System.Drawing.Size(163, 22);
             this.menuVideo.Text = "View";

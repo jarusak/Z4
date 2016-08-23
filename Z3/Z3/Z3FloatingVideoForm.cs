@@ -22,7 +22,7 @@ namespace Z3.View.Floating
         public Z3FloatingVideoForm()
         {
             InitializeComponent();
-
+            this.TopMost = true;
             hook = new MouseHook(true, true);
             hook.OnMouseActivity += new MouseEventHandler(hook_OnMouseActivity);
             hook.Start(true, true);
@@ -35,6 +35,22 @@ namespace Z3.View.Floating
             this.Resize += new EventHandler(Form2_Resize);
             this.Load += new EventHandler(Z3FloatingVideoForm_Load);
             this.FormClosing += new FormClosingEventHandler(Z3FloatingVideoForm_Closing);
+        }
+
+        private const int SnapDist = 100;
+        private bool DoSnap(int pos, int edge)
+        {
+            int delta = pos - edge;
+            return delta > 0 && delta <= SnapDist;
+        }
+        protected override void OnResizeEnd(EventArgs e)
+        {
+            base.OnResizeEnd(e);
+            Screen scn = Screen.FromPoint(this.Location);
+            if (DoSnap(this.Left, scn.WorkingArea.Left)) this.Left = scn.WorkingArea.Left;
+            if (DoSnap(this.Top, scn.WorkingArea.Top)) this.Top = scn.WorkingArea.Top;
+            if (DoSnap(scn.WorkingArea.Right, this.Right)) this.Left = scn.WorkingArea.Right - this.Width;
+            if (DoSnap(scn.WorkingArea.Bottom, this.Bottom)) this.Top = scn.WorkingArea.Bottom - this.Height;
         }
 
         private void Z3FloatingVideoForm_Closing(object sender, EventArgs e)

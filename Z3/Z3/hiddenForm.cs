@@ -20,6 +20,7 @@ namespace Z3
         }
        
         // moves Form1 when Form2 is moved
+        // makes hidden form unable to move
         protected override void WndProc(ref Message message)
         {
             const int WM_SYSCOMMAND = 0x0112;

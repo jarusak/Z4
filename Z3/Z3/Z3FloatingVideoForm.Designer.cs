@@ -55,6 +55,8 @@ namespace Z3.View.Floating
             // 
             // _meas
             // 
+            this._meas.AutoSize = true;
+            this._meas.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this._meas.Calibrating = false;
             this._meas.Dock = System.Windows.Forms.DockStyle.Fill;
             this._meas.Enabled = false;
@@ -69,7 +71,7 @@ namespace Z3.View.Floating
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(231, 127);
-            this.ControlBox = false;
+            this.ControlBox = true;
             this.Controls.Add(this.panel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Z3FloatingVideoForm";
