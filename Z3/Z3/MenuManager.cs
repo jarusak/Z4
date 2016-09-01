@@ -16,6 +16,7 @@ namespace Z3.View.Impl
         GlobalControlElements, CalibControlElements, StopperElement
     {
         private Form _form;
+        public bool isOneWindow = false;
 
         public MenuElementsImpl() {
             InitializeComponent();
@@ -265,6 +266,9 @@ namespace Z3.View.Impl
 
         private void menuVideoOneWindow_Click(object sender, EventArgs e)
         {
+            isOneWindow = true;
+            menuVideoOneWindow.Enabled = false;
+
             if (OneWindowClicked != null)
                 OneWindowClicked(sender, e);
         }
@@ -728,7 +732,7 @@ namespace Z3.View.Impl
         private System.Windows.Forms.ToolStripMenuItem menuToolsOptions;
         private System.Windows.Forms.ToolStripMenuItem menuToolsStopper;
         private System.Windows.Forms.ToolStripMenuItem menuVideo;
-        private System.Windows.Forms.ToolStripMenuItem menuVideoOneWindow;
+        public System.Windows.Forms.ToolStripMenuItem menuVideoOneWindow;
         private System.Windows.Forms.ToolStripMenuItem menuToolsSchema;
         private System.Windows.Forms.ToolStripSeparator menuDataSep1;
         private System.Windows.Forms.ToolStripMenuItem menuHelp;

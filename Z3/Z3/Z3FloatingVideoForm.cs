@@ -43,6 +43,7 @@ namespace Z3.View.Floating
             int delta = pos - edge;
             return delta > 0 && delta <= SnapDist;
         }
+
         protected override void OnResizeEnd(EventArgs e)
         {
             base.OnResizeEnd(e);

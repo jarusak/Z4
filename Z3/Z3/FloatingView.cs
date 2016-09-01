@@ -261,13 +261,69 @@ namespace Z3.View.Floating
             _intentionalClose = false;
         }
 
+        Point menuLocation;
+        Point videoLocation;
+        Point controlLocation;
+        Point progressLocation;
+        Point dataPointLocation;
+
+        Size menuSize;
+        Size videoSize;
+        Size controlSize;
+        Size progressSize;
+        Size dataPointsSize;
+
         void WindowElements.Rearrange()
         {
-            ((WindowElements)this).Hide();
+            MainWindow mainForm = new MainWindow(_menu, _videoForm, _controlForm, _progress, _dataPointsForm, ((WindowElements)this)); 
 
-            Form mainForm = new MainWindow(_menu, _videoForm, _controlForm, _progress, _dataPointsForm);
-            mainForm.Show();
-        }
+            if (_menu.isOneWindow)
+            {
+                ((WindowElements)this).Hide();
+
+                menuLocation = _menuForm.Location;
+                videoLocation = _videoForm.Location;
+                controlLocation = _controlForm.Location;
+                progressLocation = _progress.Location;
+                dataPointLocation = _dataPointsForm.Location;
+
+                menuSize = _menuForm.Size;
+                videoSize = _videoForm.Size;
+                controlSize = _controlForm.Size;
+                progressSize = _progress.Size;
+                dataPointsSize = _dataPointsForm.Size;
+
+                mainForm.Show();
+            }
+            else
+            {
+                _menu.Bind(_menuForm, _menuForm);
+                _menuForm.Show();
+               
+                _controlForm.MdiParent = null;
+                _progress.MdiParent = null;
+                _dataPointsForm.MdiParent = null;
+
+                _menuForm.Location = menuLocation;
+                _videoForm.Location = videoLocation;
+                _controlForm.Location = controlLocation;
+                _progress.Location = progressLocation;
+                _dataPointsForm.Location = dataPointLocation;
+
+                _menuForm.Size = menuSize;
+                _videoForm.Size = videoSize;
+                _controlForm.Size = controlSize;
+                _progress.Size = progressSize;
+                _dataPointsForm.Size = dataPointsSize;
+
+                _controlForm.OneWindow = false;
+                _progress.OneWindow = false;
+                _dataPointsForm.OneWindow = false;
+                mainForm.IsMdiContainer = false;
+                
+                mainForm.CloseIt();
+            }
+         }
 
         public event EventHandler<FormClosingEventArgs> ViewClosing;
         public event EventHandler<FormClosedEventArgs> ViewClosed;

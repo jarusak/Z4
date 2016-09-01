@@ -39,7 +39,7 @@
             this.ClientSize = new System.Drawing.Size(284, 230);
             this.ControlBox = false;
             this.Name = "hiddenForm";
-            this.Opacity = 50;
+            this.Opacity = 0.01D;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "hiddenForm";

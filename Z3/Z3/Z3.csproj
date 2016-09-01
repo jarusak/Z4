@@ -14,8 +14,8 @@
     </ApplicationIcon>
     <StartupObject>Z3.Program</StartupObject>
     <SignManifests>true</SignManifests>
-    <ManifestCertificateThumbprint>98007F28FD6C9A6E1D0278ED788E0256F02F6226</ManifestCertificateThumbprint>
-    <ManifestKeyFile>deployment_key.pfx</ManifestKeyFile>
+    <ManifestCertificateThumbprint>4263CA99B0C82E8777E7140A1ECA46859AEEF4C2</ManifestCertificateThumbprint>
+    <ManifestKeyFile>Z3_TemporaryKey.pfx</ManifestKeyFile>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>deployment_key.pfx</AssemblyOriginatorKeyFile>
     <GenerateManifests>true</GenerateManifests>
@@ -28,9 +28,9 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
     <TargetFrameworkProfile />
-    <PublishUrl>C:\deploy\z3\</PublishUrl>
+    <PublishUrl>\\localhost\c%24\Users\Daniel\Desktop\Deploy\</PublishUrl>
     <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
+    <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateMode>Foreground</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
@@ -38,14 +38,14 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>\\localhost\c%24\Users\Daniel\Desktop\Deploy\</InstallUrl>
     <SupportUrl>http://lter.limnology.wisc.edu/software/Z3</SupportUrl>
     <ProductName>Z3</ProductName>
     <PublisherName>UW Center for Limnology</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>27</ApplicationRevision>
-    <ApplicationVersion>3.6.2.27</ApplicationVersion>
+    <ApplicationRevision>30</ApplicationRevision>
+    <ApplicationVersion>3.6.2.30</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -304,13 +304,10 @@
     <BaseApplicationManifest Include="Properties\app.manifest" />
     <None Include="app.config" />
     <None Include="deployment_key.pfx" />
-    <None Include="newkey3.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="Z3_1_TemporaryKey.pfx" />
-    <None Include="Z3_2_TemporaryKey.pfx" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -371,6 +368,7 @@
     <Compile Include="ZMeasurement.cs" />
     <Compile Include="TreeWrapper.cs" />
     <Compile Include="ZIndividual.cs" />
+    <None Include="Z3_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="search.ico" />
