@@ -444,23 +444,23 @@ namespace Z3.Logic
             // 
             // openSchema
             // 
-            this.openSchema.DefaultExt = "z3s";
-            this.openSchema.FileName = "Z3Schema";
-            this.openSchema.Filter = "Z3 Schemas|*.z3s|All files|*.*";
+            this.openSchema.DefaultExt = "z4s";
+            this.openSchema.FileName = "Z4Schema";
+            this.openSchema.Filter = "Z4 Schemas|*.z4s|All files|*.*";
             this.openSchema.Title = "Select Counting Schema";
             // 
             // newWorkspace
             // 
-            this.newWorkspace.DefaultExt = "z3w";
-            this.newWorkspace.FileName = "Z3Workspace";
-            this.newWorkspace.Filter = "Z3 Workspaces|*.z3w|All files|*.*";
+            this.newWorkspace.DefaultExt = "z4w";
+            this.newWorkspace.FileName = "Z4Workspace";
+            this.newWorkspace.Filter = "Z4 Workspaces|*.z4w|All files|*.*";
             this.newWorkspace.Title = "Create new Workspace";
             // 
             // openWorkspace
             // 
-            this.openWorkspace.DefaultExt = "z3w";
+            this.openWorkspace.DefaultExt = "z4w";
             this.openWorkspace.FileName = "Z3Workspace";
-            this.openWorkspace.Filter = "Z3 Workspaces|*.z3w|All files|*.*";
+            this.openWorkspace.Filter = "Z4 Workspaces|*.z4w|All files|*.*";
             this.openWorkspace.Title = "Open Workspace";
         }
 

@@ -17,8 +17,8 @@ namespace Z3.Forms
             //  Change assembly information settings for your application through either:
             //  - Project->Properties->Application->Assembly Information
             //  - AssemblyInfo.cs
-            this.Text = String.Format("About {0}", AssemblyTitle);
-            this.labelProductName.Text = AssemblyProduct;
+            this.Text = String.Format("About {0}", "Z4");
+            this.labelProductName.Text = "Z4";
             this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
@@ -114,6 +114,11 @@ namespace Z3.Forms
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             System.Diagnostics.Process.Start("http://lter.limnology.wisc.edu/software/Z3");
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
